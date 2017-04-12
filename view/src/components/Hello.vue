@@ -1,5 +1,8 @@
 <template>
-  <div class="">{{ msg }}</div>
+  <div class="">
+    <p>{{ name }}</p>
+    <p>{{ url }}</p>
+  </div>
 </template>
 
 <script>
@@ -7,13 +10,17 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      name: '',
+      url: ''
     }
   },
   mounted () {
+    var that = this
     this.$axios.get('/')
     .then(function (response) {
       console.log(response)
+      that.name = response.data.name
+      that.url = response.data.url
     })
     .catch(function (error) {
       console.log(error)
