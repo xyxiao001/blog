@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom'
 
 // 导入css
 import './index.css'
@@ -8,14 +9,14 @@ class Slider extends Component {
     return (
       <div className="slider">
         <ul>
-          <li className="slider-item activity">
-            <a>博文管理</a>
+          <li>
+            <NavLink exact to="/dashboard" className="slider-item">博文管理</NavLink>
           </li>
-          <li className="slider-item">
-            <a>标签管理</a>
+          <li>
+            <NavLink to="/dashboard/tags" className="slider-item">标签管理</NavLink>
           </li>
-          <li className="slider-item">
-            <a>数据统计</a>
+          <li>
+            <NavLink to="/dashboard/data" className="slider-item">数据统计</NavLink>
           </li>
         </ul>
       </div>

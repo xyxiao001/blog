@@ -28,12 +28,14 @@
   transition: all .2s;
 }
 
-.slider-item a {
+.slider-item {
   display: block;
+  color: rgba(0,0,0,.65);
   transition: color .3s ease;
+  user-select: none;
 }
 
-.slider-item a::before {
+.slider-item::before {
   position: absolute;
   background-color: transparent;
   width: 100%;
@@ -45,19 +47,16 @@
   content: "";
 }
 
-.slider-item a:hover {
+.slider-item:hover {
   color: #108ee9;
 }
 
-.slider-item.activity {
+.slider-item.active {
+  color: #108ee9;
   background-color: #ecf6fd;
 }
 
-.slider-item.activity a {
-  color: #108ee9;
-}
-
-.slider-item.activity:after{
+.slider-item.active:after{
   transform: scaleY(1);
   border-right: 3px solid #108ee9;
 }

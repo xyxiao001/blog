@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
+import { Route } from 'react-router-dom'
 
 import Slider from '../Slider'
+import Article from '../Article'
+import Tags from '../Tags'
+import Data from '../Data'
 
 // 导入css
 import './index.css'
@@ -10,9 +14,9 @@ class Dashboard extends Component {
     return (
       <div className="main-warper">
         <Slider />
-        <div className="main-content">
-          dashboard
-        </div>
+        <Route exact path="/dashboard" component={Article} />
+        <Route path="/dashboard/tags" component={Tags} />
+        <Route path="/dashboard/data" component={Data} />
       </div>
     )
   }
