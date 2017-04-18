@@ -12,7 +12,7 @@ class Button extends Component {
       onClick(e);
     }
   }
-  
+
   render() {
     const {
       type, children, prefixCls, className
