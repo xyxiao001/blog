@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import config from './config'
 import user from './models/user'
+import article from './models/article'
 
 const app = express()
 
@@ -34,10 +35,16 @@ app.get('/', (req, res) => {
       return res.json(data)
     }
   })
-  // return res.json({
-  //   name: 'goodboy',
-  //   url: 'http://xyxiao.cn'
-  // })
+})
+
+app.get('/article', (req, res) => {
+  article.find({}, (error, data) => {
+    if (error) {
+      console.log(error)
+    } else {
+      return res.json(data)
+    }
+  })
 })
 
 const server = app.listen(config.port, function() {

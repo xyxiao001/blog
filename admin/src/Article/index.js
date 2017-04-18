@@ -8,8 +8,10 @@ class Article extends Component {
   render() {
     return (
       <div className="main-content">
-        <p>博文</p>
-        <Button type="primary">新增博文</Button>
+        <Button type="primary" onClick={() => console.log('触发新增博文事件')}>新增博文</Button>
+        <div className="article-list">
+          博文列表
+        </div>
       </div>
     )
   }

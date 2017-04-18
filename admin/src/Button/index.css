@@ -1,6 +1,7 @@
 .x-btn {
   display: inline-block;
   margin-bottom: 0;
+  margin-right: 8px;
   font-weight: 500;
   text-align: center;
   touch-action: manipulation;
@@ -19,4 +20,40 @@
   background-color: #fff;
   border-color: #d9d9d9;
   outline: 0;
+}
+
+.x-btn:hover, .x-btn:focus {
+  color: #108ee9;
+  border-color: #108ee9;
+}
+
+.x-btn-primary {
+  color: #fff;
+  background-color: #108ee9;
+  border-color: #108ee9;
+}
+
+.x-btn-primary:hover, .x-btn-primary:focus {
+  color: #fff;
+  background-color: #49a9ee;
+  border-color: #49a9ee;
+}
+
+.x-btn-danger {
+  color: #fff;
+  background-color: #f04134;
+  border-color: #f04134;
+}
+
+.x-btn-danger:hover, .x-btn-danger:focus{
+  color: #fff;
+  background-color: #f46e65;
+  border-color: #f46e65;
+}
+
+.x-btn-dashed {
+  color: rgba(0,0,0,.65);
+  background-color: #fff;
+  border-color: #d9d9d9;
+  border-style: dashed;
 }
