@@ -1,0 +1,38 @@
+.add-article {
+  margin-left: 20px;
+}
+
+.article-list {
+  /*display: flex;*/
+}
+
+.article-item {
+  min-width: 400px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  transform: translate3d(0, -2px, 0);
+}
+
+.article-name {
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 700;
+  margin: 0;
+  overflow: hidden;
+  max-height: 60px;
+  color: #333;
+}
+
+.article-content {
+  margin: 10px 0;
+  line-height: 1.7;
+  max-height: 84px;
+  overflow: hidden;
+  color: #666;
+}
+
+.article-time {
+  color: gray;
+  font-size: 14px;
+}
