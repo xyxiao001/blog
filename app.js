@@ -38,7 +38,18 @@ app.get('/', (req, res) => {
 })
 
 app.get('/article', (req, res) => {
-  article.find({}, (error, data) => {
+  if (req.query.id) {
+    // 如果查询参数带id 那么直接返回一条的详细信息
+    article.findOne({_id: req.query.id}).exec((error, data) => {
+      if (error) {
+        console.log(error)
+      } else {
+        return res.json(data)
+      }
+    })
+    return false
+  }
+  article.find().sort({'time': -1}).exec((error, data) => {
     if (error) {
       console.log(error)
     } else {

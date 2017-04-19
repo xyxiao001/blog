@@ -1,0 +1,28 @@
+.box-edit {
+  display: flex;
+  width: 100%;
+}
+
+.edit {
+  width: 50%;
+}
+
+.edit textarea {
+  display: block;
+  width: 95%;
+  min-height: 500px;
+  resize: none;
+}
+
+.edit input {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.saveEdit {
+  margin-top: 20px;
+}
+
+.preview {
+  width: 50%;
+}

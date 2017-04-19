@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import Moment from 'moment'
 
 //组件
@@ -42,13 +43,13 @@ class Article extends Component {
 class Item extends Component {
   render() {
     return (
-      <div className="article-item">
+      <Link className="article-item" to={'/dashboard/editArticle/' + this.props.data._id}>
         <h1 className="article-name">{ this.props.data.name }</h1>
         <section className="article-content">
           { this.props.data.content }
         </section>
-        <p className="article-time">goodboy · { Moment(this.props.data.time).format('YYYY-MM-DD hh:mm:ss') }</p>
-      </div>
+        <p className="article-time">goodboy · { Moment(this.props.data.time).format('YYYY-MM-DD HH:MM:SS') }</p>
+      </Link>
     )
   }
 }
