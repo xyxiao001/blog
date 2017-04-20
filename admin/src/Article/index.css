@@ -1,5 +1,5 @@
 .add-article {
-  margin: 0 0 20px 20px;
+  margin: 0 0 20px 0;
 }
 
 .article-list {
@@ -13,7 +13,7 @@
   margin-right: 10%;
   padding: 10px 20px;
   margin-bottom: 10px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
   transform: translate3d(0, -2px, 0);
 }
 
@@ -38,4 +38,11 @@
 .article-time {
   color: gray;
   font-size: 14px;
+}
+
+@media screen and (max-width: 1400px) {
+  .article-item {
+    width: 48%;
+    margin-right: 2%;
+  }
 }
