@@ -10,6 +10,8 @@ import './index.css'
 class EditArticle extends Component {
   constructor(props) {
     super(props)
+    this.updateName = this.updateName.bind(this)
+    this.updateTime = this.updateTime.bind(this)
     this.updateEdit = this.updateEdit.bind(this)
     this.state = {
       id: 0,
@@ -30,12 +32,13 @@ class EditArticle extends Component {
       window.axios.get('/article?id=' + this.state.id)
       .then(function (response) {
         // console.log(response.data)
+        response.data.time = Moment(response.data.time).format('YYYY-MM-DD HH:MM:SS')
         that.setState({
           info: response.data
         }, () => {
           that.refs.name.value = that.state.info.name
           that.refs.edit.value = that.state.info.content
-          that.refs.time.value = Moment(that.state.info.time).format('YYYY-MM-DD HH:MM:SS')
+          that.refs.time.value = that.state.info.time
         })
       })
       .catch(function (error) {
@@ -43,6 +46,23 @@ class EditArticle extends Component {
       })
     })
   }
+
+  updateName(e) {
+    var obj = Object.assign({}, this.state.info)
+    obj.name = e.target.value
+    this.setState({
+      info: obj
+    })
+  }
+
+  updateTime(e) {
+    var obj = Object.assign({}, this.state.info)
+    obj.time = e.target.value
+    this.setState({
+      info: obj
+    })
+  }
+
   updateEdit(e) {
     var obj = Object.assign({}, this.state.info)
     obj.content = e.target.value
@@ -61,6 +81,7 @@ class EditArticle extends Component {
               defaultValue={this.state.info.name}
               className="x-input"
               placeholder="请输入文章标题"
+              onChange={this.updateName}
             />
           <label className="x-label">文章时间</label>
             <input
@@ -68,6 +89,7 @@ class EditArticle extends Component {
               defaultValue={this.state.info.time}
               className="x-input"
               placeholder="文章时间"
+              onChange={this.updateTime}
             />
           <label className="x-label">文章内容</label>
             <textarea
@@ -80,8 +102,8 @@ class EditArticle extends Component {
           <Button type="danger" className="saveEdit" onClick={() => console.log('删除')}>删除文章</Button>
           </div>
           <div className="preview">
-            <h1>{this.state.info.name}</h1>
-            <ReactMarkdown source={this.state.info.content} />
+            <h1 className="title">{this.state.info.name}</h1>
+            <ReactMarkdown className="markdown-body" source={this.state.info.content} />
           </div>
         </div>
       </div>

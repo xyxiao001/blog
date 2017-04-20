@@ -1,3 +1,5 @@
+@import "https://cdn.bootcss.com/github-markdown-css/2.6.0/github-markdown.min.css";
+
 .box-edit {
   display: flex;
   width: 100%;
@@ -29,4 +31,9 @@
 
 .preview {
   width: 50%;
+}
+
+.preview .title{
+  margin: 10px 0;
+  text-align: center;
 }
