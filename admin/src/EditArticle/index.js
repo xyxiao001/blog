@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Moment from 'moment'
 import ReactMarkdown from 'react-markdown'
 import Button from '../Button'
-import { message, DatePicker } from 'antd'
+import { message, DatePicker, Modal } from 'antd'
 
 // 导入css
 import './index.css'
@@ -17,6 +17,7 @@ class EditArticle extends Component {
     this.updateArticle = this.updateArticle.bind(this)
     this.addArticle = this.addArticle.bind(this)
     this.rule = this.rule.bind(this)
+    this.deleteArticle = this.deleteArticle.bind(this)
     this.state = {
       id: 0,
       edit: true,
@@ -95,12 +96,12 @@ class EditArticle extends Component {
       data: JSON.stringify(that.state.info)
     })
     .then(function (response) {
-      if(response.status === 1) {
+      if(~~(response.data.status) === 1) {
         message.success(response.data.msg)
       } else {
         message.error(response.data.msg)
       }
-      console.log(response)
+      // console.log(response)
     })
     .catch(function (error) {
       message.error('请求失败！')
@@ -137,6 +138,30 @@ class EditArticle extends Component {
     })
   }
 
+  // 删除文章
+  deleteArticle() {
+    var that = this
+    Modal.confirm({
+      title: '确认删除？',
+      content: '删除后无法恢复！',
+      okText: '删除',
+      cancelText: '取消',
+      onOk: () => {
+        window.axios.post('/deleteArticle', {
+          id: JSON.stringify(that.state.info._id)
+        })
+        .then(function (response) {
+          message.success(response.data.msg)
+          that.props.history.goBack(-1)
+          // console.log(response)
+        })
+        .catch(function (error) {
+          message.error('请求失败！')
+          console.log(error)
+        })
+      }
+    })
+  }
   // 校验规则
   rule () {
     var o = this.state.info
@@ -188,7 +213,7 @@ class EditArticle extends Component {
             />
           <div className={this.state.edit ? 'edit-control' : 'hide'}>
             <Button type="primary" className="saveEdit" onClick={this.updateArticle}>更新文章</Button>
-            <Button type="danger" className="saveEdit" onClick={() => console.log('删除')}>删除文章</Button>
+            <Button type="danger" className="saveEdit" onClick={this.deleteArticle}>删除文章</Button>
           </div>
           <div className={!this.state.edit ? 'add-control' : 'hide'}>
             <Button type="primary" className="saveEdit" onClick={this.addArticle}>保存文章</Button>

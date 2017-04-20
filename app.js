@@ -123,6 +123,28 @@ app.post('/addArticle', (req, res) => {
   })
 })
 
+// 删除文章
+app.post('/deleteArticle', (req, res) => {
+  var id = JSON.parse(req.body.id)
+  if (id) {
+    article.remove({_id: id}).exec((error, data) => {
+      if (error) {
+        console.log(error)
+        return res.json({
+          status: 0,
+          msg: '删除失败'
+        })
+      } else {
+        return res.json({
+          status: 1,
+          msg: '删除成功'
+        })
+      }
+    })
+  }
+})
+
+
 const server = app.listen(config.port, function() {
 	console.log(`The server is already started, Listen on port ${config.port}!`)
 })
