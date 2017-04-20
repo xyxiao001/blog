@@ -48,17 +48,33 @@ app.get('/article', (req, res) => {
     article.findOne({_id: req.query.id}).exec((error, data) => {
       if (error) {
         console.log(error.message)
+        return res.json({
+          status: 0,
+          msg: '查询文章失败'
+        })
       } else {
-        return res.json(data)
+        return res.json({
+          status: 1,
+          msg: '查询文章成功',
+          data: data
+        })
       }
     })
     return false
   }
   article.find().sort({'time': -1}).exec((error, data) => {
     if (error) {
+      return res.json({
+        status: 0,
+        msg: '查询文章失败'
+      })
       console.log(error)
     } else {
-      return res.json(data)
+      return res.json({
+        status: 0,
+        msg: '查询文章成功',
+        data: data
+      })
     }
   })
 })
@@ -69,7 +85,7 @@ app.post('/updateArticle', (req, res) => {
   if (obj.time == 'Invalid Date') {
     obj.time = new Date()
   }
-  if (obj._id !== 0) {
+  if (obj._id && obj._id !== 0) {
     //数据库查询id 更新文章
     article.update({_id: obj._id}, obj).exec((error, data) => {
       if (error) {
@@ -84,6 +100,11 @@ app.post('/updateArticle', (req, res) => {
           msg: '更新成功'
         })
       }
+    })
+  } else {
+    return res.json({
+      status: 0,
+      msg: '更新失败'
     })
   }
 })

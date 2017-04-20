@@ -17,6 +17,7 @@ class Dashboard extends Component {
         <Slider />
         <Route exact path="/dashboard" component={Article} />
         <Route path="/dashboard/editArticle/:id" component={EditArticle} />
+        <Route path="/dashboard/addArticle" component={EditArticle} />
         <Route path="/dashboard/tags" component={Tags} />
         <Route path="/dashboard/data" component={Data} />
       </div>

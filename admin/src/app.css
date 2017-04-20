@@ -9,7 +9,6 @@ body {
   line-height: 1.5;
   font-size: 14px;
   background: #fff;
-  -webkit-transition: background 1s cubic-bezier(.075,.82,.165,1);
   transition: background 1s cubic-bezier(.075,.82,.165,1);
   overflow-x: hidden;
 }

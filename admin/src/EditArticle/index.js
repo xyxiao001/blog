@@ -16,8 +16,8 @@ class EditArticle extends Component {
     this.updateArticle = this.updateArticle.bind(this)
     this.state = {
       id: 0,
+      edit: true,
       info: {
-        _id: '',
         name: '',
         tags: [],
         content: '',
@@ -26,27 +26,37 @@ class EditArticle extends Component {
     }
   }
   componentWillMount() {
-    var id = this.props.match.params.id
-    this.setState({
-      id: id
-    }, () => {
-      var that = this
-      window.axios.get('/article?id=' + this.state.id)
-      .then(function (response) {
-        // console.log(response.data)
-        response.data.time = Moment(response.data.time).format('YYYY-MM-DD HH:MM:SS')
-        that.setState({
-          info: response.data
-        }, () => {
-          that.refs.name.value = that.state.info.name
-          that.refs.edit.value = that.state.info.content
-          that.refs.time.value = that.state.info.time
+    var path = this.props.match.path
+    if(path.search('/dashboard/addArticle') !== -1) {
+      var obj = Object.assign({}, this.state.info)
+      obj.time = Moment(new Date()).format('YYYY-MM-DD HH:MM:SS')
+      this.setState({
+        edit: false,
+        info: obj
+      })
+    } else {
+      var id = this.props.match.params.id
+      this.setState({
+        id: id
+      }, () => {
+        var that = this
+        window.axios.get('/article?id=' + this.state.id)
+        .then(function (response) {
+          // console.log(response.data)
+          response.data.time = Moment(response.data.time).format('YYYY-MM-DD HH:MM:SS')
+          that.setState({
+            info: response.data.data
+          }, () => {
+            that.refs.name.value = that.state.info.name
+            that.refs.edit.value = that.state.info.content
+            that.refs.time.value = that.state.info.time
+          })
+        })
+        .catch(function (error) {
+          console.log(error)
         })
       })
-      .catch(function (error) {
-        console.log(error)
-      })
-    })
+    }
   }
 
   updateName(e) {

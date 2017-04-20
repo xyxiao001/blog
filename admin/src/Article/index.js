@@ -20,7 +20,7 @@ class Article extends Component {
     window.axios.get('/article')
     .then(function (response) {
       that.setState({
-        articleLists: response.data
+        articleLists: response.data.data
       })
     })
     .catch(function (error) {
@@ -30,7 +30,7 @@ class Article extends Component {
   render() {
     return (
       <div className="main-content">
-        <Button type="primary"  className="add-article" onClick={() => console.log('触发新增博文事件')}>新增博文</Button>
+        <Link to="/dashboard/addArticle"><Button type="primary"  className="add-article">新增博文</Button></Link>
         <div className="article-list">
           {this.state.articleLists.map((article) => <Item key={article.name} data={article} />)}
         </div>
