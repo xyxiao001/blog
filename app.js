@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import config from './config'
 import user from './models/user'
 import article from './models/article'
+import bodyParser from 'body-parser'
 
 const app = express()
 
@@ -17,10 +18,14 @@ db.once('open', (callback) => {
   console.log('数据库连接成功！')
 })
 
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
+
 // 允许跨域
 app.all('*', (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "X-Requested-With")
+  res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type")
   res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS")
   res.header("X-Powered-By",' 3.2.1')
   res.header("Content-Type", "application/json;charset=utf-8")
@@ -42,7 +47,7 @@ app.get('/article', (req, res) => {
     // 如果查询参数带id 那么直接返回一条的详细信息
     article.findOne({_id: req.query.id}).exec((error, data) => {
       if (error) {
-        console.log(error)
+        console.log(error.message)
       } else {
         return res.json(data)
       }
@@ -56,6 +61,31 @@ app.get('/article', (req, res) => {
       return res.json(data)
     }
   })
+})
+
+app.post('/updateArticle', (req, res) => {
+  var obj = JSON.parse(req.body.data)
+  obj.time = new Date(obj.time)
+  if (obj.time == 'Invalid Date') {
+    obj.time = new Date()
+  }
+  if (obj._id !== 0) {
+    //数据库查询id 更新文章
+    article.update({_id: obj._id}, obj).exec((error, data) => {
+      if (error) {
+        console.log(error)
+        return res.json({
+          status: 0,
+          msg: '更新失败'
+        })
+      } else {
+        return res.json({
+          status: 1,
+          msg: '更新成功'
+        })
+      }
+    })
+  }
 })
 
 const server = app.listen(config.port, function() {

@@ -13,9 +13,11 @@ class EditArticle extends Component {
     this.updateName = this.updateName.bind(this)
     this.updateTime = this.updateTime.bind(this)
     this.updateEdit = this.updateEdit.bind(this)
+    this.updateArticle = this.updateArticle.bind(this)
     this.state = {
       id: 0,
       info: {
+        _id: '',
         name: '',
         tags: [],
         content: '',
@@ -70,6 +72,20 @@ class EditArticle extends Component {
       info: obj
     })
   }
+
+  // 修改文章
+  updateArticle() {
+    var that = this
+    window.axios.post('/updateArticle', {
+      data: JSON.stringify(that.state.info)
+    })
+    .then(function (response) {
+      console.log(response)
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+  }
   render() {
     return (
       <div className="main-content">
@@ -98,7 +114,7 @@ class EditArticle extends Component {
               defaultValue={this.state.info.content}
               onChange={this.updateEdit}
             />
-          <Button type="primary" className="saveEdit" onClick={() => console.log('更新')}>更新文章</Button>
+          <Button type="primary" className="saveEdit" onClick={this.updateArticle}>更新文章</Button>
           <Button type="danger" className="saveEdit" onClick={() => console.log('删除')}>删除文章</Button>
           </div>
           <div className="preview">
