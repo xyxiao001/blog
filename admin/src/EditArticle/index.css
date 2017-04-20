@@ -9,16 +9,24 @@
   width: 50%;
 }
 
-.edit textarea {
+.edit label {
+  margin-top: 20px;
+}
+
+.edit .x-input {
+  width: 200px;
+}
+
+.edit .ant-calendar-picker {
+  width: 200px!important;
+  font-size: 15px;
+}
+
+.edit textarea.x-input {
   display: block;
   width: 95%;
   min-height: 500px;
   resize: none;
-}
-
-.edit input {
-  width: 200px;
-  margin-bottom: 20px;
 }
 
 .edit button {

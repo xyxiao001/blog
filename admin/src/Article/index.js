@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Moment from 'moment'
+import { message } from 'antd'
 
 //组件
 import Button from '../Button'
@@ -19,6 +20,7 @@ class Article extends Component {
     let that = this
     window.axios.get('/article')
     .then(function (response) {
+      message.success(response.data.msg)
       that.setState({
         articleLists: response.data.data
       })
@@ -32,7 +34,7 @@ class Article extends Component {
       <div className="main-content">
         <Link to="/dashboard/addArticle"><Button type="primary"  className="add-article">新增博文</Button></Link>
         <div className="article-list">
-          {this.state.articleLists.map((article) => <Item key={article.name} data={article} />)}
+          {this.state.articleLists.map((article) => <Item key={article.name + Math.random()} data={article} />)}
         </div>
       </div>
     )
@@ -48,7 +50,7 @@ class Item extends Component {
         <section className="article-content">
           { this.props.data.content }
         </section>
-        <p className="article-time">goodboy · { Moment(this.props.data.time).format('YYYY-MM-DD HH:MM:SS') }</p>
+        <p className="article-time">goodboy · { Moment(this.props.data.time).format('YYYY-MM-DD HH:mm:ss') }</p>
       </Link>
     )
   }

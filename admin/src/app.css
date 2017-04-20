@@ -10,7 +10,7 @@ body {
   font-size: 14px;
   background: #fff;
   transition: background 1s cubic-bezier(.075,.82,.165,1);
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 .page-wraper {
@@ -30,6 +30,7 @@ li {
 }
 
 .main-warper {
+  min-width: 1250px;
   position: relative;
   display: flex;
   margin: 0 48px;
@@ -79,4 +80,9 @@ li {
 .x-label {
   display: block;
   line-height: 30px;
+}
+
+.hide {
+  display: none;
+  opacity: 0;
 }

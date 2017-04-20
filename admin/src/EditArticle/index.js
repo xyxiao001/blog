@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Moment from 'moment'
 import ReactMarkdown from 'react-markdown'
 import Button from '../Button'
+import { message, DatePicker } from 'antd'
 
 // 导入css
 import './index.css'
@@ -14,6 +15,8 @@ class EditArticle extends Component {
     this.updateTime = this.updateTime.bind(this)
     this.updateEdit = this.updateEdit.bind(this)
     this.updateArticle = this.updateArticle.bind(this)
+    this.addArticle = this.addArticle.bind(this)
+    this.rule = this.rule.bind(this)
     this.state = {
       id: 0,
       edit: true,
@@ -21,18 +24,15 @@ class EditArticle extends Component {
         name: '',
         tags: [],
         content: '',
-        time: ''
+        time: new Date()
       }
     }
   }
   componentWillMount() {
     var path = this.props.match.path
     if(path.search('/dashboard/addArticle') !== -1) {
-      var obj = Object.assign({}, this.state.info)
-      obj.time = Moment(new Date()).format('YYYY-MM-DD HH:MM:SS')
       this.setState({
-        edit: false,
-        info: obj
+        edit: false
       })
     } else {
       var id = this.props.match.params.id
@@ -43,16 +43,18 @@ class EditArticle extends Component {
         window.axios.get('/article?id=' + this.state.id)
         .then(function (response) {
           // console.log(response.data)
-          response.data.time = Moment(response.data.time).format('YYYY-MM-DD HH:MM:SS')
+          message.success(response.data.msg)
+          response.data.data.time = Moment(response.data.data.time).format('YYYY-MM-DD HH:mm:ss')
           that.setState({
             info: response.data.data
           }, () => {
             that.refs.name.value = that.state.info.name
             that.refs.edit.value = that.state.info.content
-            that.refs.time.value = that.state.info.time
+            // that.refs.time.value = that.state.info.time
           })
         })
         .catch(function (error) {
+          message.error('请求失败！')
           console.log(error)
         })
       })
@@ -67,9 +69,9 @@ class EditArticle extends Component {
     })
   }
 
-  updateTime(e) {
+  updateTime(value, date) {
     var obj = Object.assign({}, this.state.info)
-    obj.time = e.target.value
+    obj.time = date
     this.setState({
       info: obj
     })
@@ -85,17 +87,75 @@ class EditArticle extends Component {
 
   // 修改文章
   updateArticle() {
+    if (!this.rule()) {
+      return false
+    }
     var that = this
     window.axios.post('/updateArticle', {
       data: JSON.stringify(that.state.info)
     })
     .then(function (response) {
+      if(response.status === 1) {
+        message.success(response.data.msg)
+      } else {
+        message.error(response.data.msg)
+      }
       console.log(response)
     })
     .catch(function (error) {
+      message.error('请求失败！')
       console.log(error)
     })
   }
+
+  // 新增文章
+  addArticle() {
+    if (!this.rule()) {
+      return false
+    }
+    var that = this
+    window.axios.post('/addArticle', {
+      data: JSON.stringify(that.state.info)
+    })
+    .then(function (response) {
+      message.success(response.data.msg)
+      that.refs.name.value = ''
+      that.refs.edit.value = ''
+      var obj = {
+        name: '',
+        content: '',
+        time: new Date()
+      }
+      that.setState({
+        info: obj
+      })
+      // that.props.history.goBack(-1)
+    })
+    .catch(function (error) {
+      message.error('请求失败！')
+      console.log(error)
+    })
+  }
+
+  // 校验规则
+  rule () {
+    var o = this.state.info
+    var s = true
+    o.name = o.name.replace(/(^\s*)|(\s*$)/g, '')
+    if (o.name.length <= 0) {
+      message.error('博客标题不能为空')
+      s = false
+      return false
+    }
+    o.content = o.content.replace(/(^\s*)|(\s*$)/g, '')
+    if (o.content.length <= 0) {
+      message.error('文章内容不能为空')
+      s = false
+      return false
+    }
+    return s
+  }
+
   render() {
     return (
       <div className="main-content">
@@ -110,11 +170,13 @@ class EditArticle extends Component {
               onChange={this.updateName}
             />
           <label className="x-label">文章时间</label>
-            <input
+            <DatePicker
+              showTime
+              allowClear={false}
               ref="time"
-              defaultValue={this.state.info.time}
-              className="x-input"
-              placeholder="文章时间"
+              format="YYYY-MM-DD HH:mm:ss"
+              placeholder="选择时间"
+              value={Moment(this.state.info.time)}
               onChange={this.updateTime}
             />
           <label className="x-label">文章内容</label>
@@ -124,8 +186,13 @@ class EditArticle extends Component {
               defaultValue={this.state.info.content}
               onChange={this.updateEdit}
             />
-          <Button type="primary" className="saveEdit" onClick={this.updateArticle}>更新文章</Button>
-          <Button type="danger" className="saveEdit" onClick={() => console.log('删除')}>删除文章</Button>
+          <div className={this.state.edit ? 'edit-control' : 'hide'}>
+            <Button type="primary" className="saveEdit" onClick={this.updateArticle}>更新文章</Button>
+            <Button type="danger" className="saveEdit" onClick={() => console.log('删除')}>删除文章</Button>
+          </div>
+          <div className={!this.state.edit ? 'add-control' : 'hide'}>
+            <Button type="primary" className="saveEdit" onClick={this.addArticle}>保存文章</Button>
+          </div>
           </div>
           <div className="preview">
             <h1 className="title">{this.state.info.name}</h1>

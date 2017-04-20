@@ -1,14 +1,16 @@
 .add-article {
-  margin-left: 20px;
+  margin: 0 0 20px 20px;
 }
 
 .article-list {
   /*display: flex;*/
+  min-width: 800px;
 }
 
 .article-item {
-  display: block;
-  max-width: 500px;
+  display: inline-block;
+  width: 40%;
+  margin-right: 10%;
   padding: 10px 20px;
   margin-bottom: 10px;
   box-shadow: 0 15px 30px rgba(0,0,0,0.1);

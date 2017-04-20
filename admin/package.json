@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^2.9.1",
     "axios": "^0.16.1",
+    "babel-plugin-import": "^1.1.1",
     "classnames": "^2.2.5",
     "moment": "^2.18.1",
     "prop-types": "^15.5.8",

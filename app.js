@@ -72,7 +72,7 @@ app.get('/article', (req, res) => {
     } else {
       return res.json({
         status: 0,
-        msg: '查询文章成功',
+        msg: '查询文章列表成功',
         data: data
       })
     }
@@ -107,6 +107,20 @@ app.post('/updateArticle', (req, res) => {
       msg: '更新失败'
     })
   }
+})
+
+app.post('/addArticle', (req, res) => {
+  var obj = JSON.parse(req.body.data)
+  obj.time = new Date(obj.time)
+  if (obj.time == 'Invalid Date') {
+    obj.time = new Date()
+  }
+  var add = new article(obj)
+  add.save()
+  return res.json({
+    status: 1,
+    msg: '添加文章成功'
+  })
 })
 
 const server = app.listen(config.port, function() {
