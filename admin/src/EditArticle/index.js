@@ -188,6 +188,7 @@ class EditArticle extends Component {
   render() {
     return (
       <div className="main-content">
+        <Button type="danger" onClick={() => history.go(-1)}>返回</Button>
         <div className="box-edit">
           <div className="edit">
             <label className="x-label">文章标题</label>
