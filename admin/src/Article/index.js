@@ -20,6 +20,7 @@ class Article extends Component {
       articleLists: []
     }
     this.getArticle = this.getArticle.bind(this)
+    this.updatePage = this.updatePage.bind(this)
   }
 
   // 请求
@@ -35,6 +36,21 @@ class Article extends Component {
     })
     .catch(function (error) {
       console.log(error)
+    })
+  }
+
+  // 翻页
+  updatePage(page, pageSize) {
+    this.props.history.push({
+      pathname: '/dashboard',
+      search: '?page=' + page
+    })
+    window.scroll(0, 0)
+    // console.log(this.props.history.location)
+    this.setState({
+      current: ~~(getQueryString(this.props.history.location.search, 'page'))
+    }, () => {
+      this.getArticle()
     })
   }
 
@@ -60,7 +76,13 @@ class Article extends Component {
         <div className="article-list">
           {this.state.articleLists.map((article) => <Item key={article.name + Math.random()} data={article} />)}
         </div>
-        <Pagination defaultCurrent={this.state.current} defaultPageSize={10} total={this.state.allPages * 10} size="large" />
+        <Pagination
+          defaultCurrent={this.state.current}
+          defaultPageSize={10}
+          total={this.state.allPages * 10}
+          size="large"
+          onChange={this.updatePage}
+           />
       </div>
     )
   }
