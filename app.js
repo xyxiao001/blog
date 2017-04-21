@@ -72,8 +72,9 @@ app.get('/article', (req, res) => {
     } else {
       // 每页条数
       let limit = 10
+      let all = data.length
       // 算出总页数
-      let allPages = Math.ceil(data.length / limit)
+      let allPages = Math.ceil(all / limit)
       // 得到当前页数
       let current = req.query.page ? ~~(req.query.page) : 1
       if (current < 1) {
@@ -93,6 +94,7 @@ app.get('/article', (req, res) => {
             msg: '查询文章列表成功',
             limit: limit,
             current: current,
+            all: all,
             allPages: allPages,
             data: data
           })

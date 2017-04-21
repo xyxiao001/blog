@@ -16,6 +16,7 @@ class Article extends Component {
     super(props)
     this.state = {
       current: 1,
+      all: 0,
       allPages: 0,
       articleLists: []
     }
@@ -30,6 +31,7 @@ class Article extends Component {
     .then(function (response) {
       message.success(response.data.msg)
       that.setState({
+        all: response.data.all,
         allPages: response.data.allPages,
         articleLists: response.data.data
       })
@@ -77,12 +79,14 @@ class Article extends Component {
           {this.state.articleLists.map((article) => <Item key={article.name + Math.random()} data={article} />)}
         </div>
         <Pagination
+          showQuickJumper={true}
           defaultCurrent={this.state.current}
           defaultPageSize={10}
-          total={this.state.allPages * 10}
+          total={this.state.all}
           size="large"
           onChange={this.updatePage}
-           />
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} 篇`}
+          />
       </div>
     )
   }

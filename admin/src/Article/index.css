@@ -5,6 +5,12 @@
 .article-list {
   /*display: flex;*/
   min-width: 800px;
+  margin-bottom: 10px;
+}
+
+.ant-pagination {
+  font-size: 14px;
+  margin-left: 20px;
 }
 
 .article-item {
