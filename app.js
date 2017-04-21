@@ -89,6 +89,13 @@ app.get('/article', (req, res) => {
           })
           console.log(error)
         } else {
+          // 处理文章
+          var lists = data.map((item, index) => {
+            if (item.content.length > 350) {
+              item.content = item.content.substring(0, 350)
+            }
+            return item
+          })
           return res.json({
             status: 0,
             msg: '查询文章列表成功',
@@ -96,7 +103,7 @@ app.get('/article', (req, res) => {
             current: current,
             all: all,
             allPages: allPages,
-            data: data
+            data: lists
           })
         }
       })
