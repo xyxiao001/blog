@@ -20,7 +20,7 @@ body {
   padding: 20px 0;
 }
 
-a {
+a, a:focus{
   cursor: pointer;
   text-decoration: none;
 }

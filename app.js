@@ -70,10 +70,33 @@ app.get('/article', (req, res) => {
       })
       console.log(error)
     } else {
-      return res.json({
-        status: 0,
-        msg: '查询文章列表成功',
-        data: data
+      // 每页条数
+      let limit = 10
+      // 算出总页数
+      let allPages = Math.ceil(data.length / limit)
+      // 得到当前页数
+      let current = req.query.page ? ~~(req.query.page) : 1
+      if (current < 1) {
+        current = 1
+      }
+      current = current > allPages ? allPages : current
+      article.find().sort({'time': -1}).skip((current - 1) * limit).limit(limit).exec((error, data) => {
+        if (error) {
+          return res.json({
+            status: 0,
+            msg: '查询文章失败'
+          })
+          console.log(error)
+        } else {
+          return res.json({
+            status: 0,
+            msg: '查询文章列表成功',
+            limit: limit,
+            current: current,
+            allPages: allPages,
+            data: data
+          })
+        }
       })
     }
   })

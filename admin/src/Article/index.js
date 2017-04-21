@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Moment from 'moment'
-import { message } from 'antd'
+import { message, Pagination } from 'antd'
 
 //组件
 import Button from '../Button'
+
+import getQueryString from '../getQueryString'
 // 导入css
 import './index.css'
 
@@ -13,21 +15,43 @@ class Article extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      current: 1,
+      allPages: 0,
       articleLists: []
     }
+    this.getArticle = this.getArticle.bind(this)
   }
-  componentWillMount() {
+
+  // 请求
+  getArticle() {
     let that = this
-    window.axios.get('/article')
+    window.axios.get('/article?page=' + that.state.current)
     .then(function (response) {
       message.success(response.data.msg)
       that.setState({
+        allPages: response.data.allPages,
         articleLists: response.data.data
       })
     })
     .catch(function (error) {
       console.log(error)
     })
+  }
+
+  componentWillMount() {
+    var search = this.props.location.search
+    if (search.length > 1) {
+      var page = ~~(getQueryString(search, 'page'))
+      page = page > 0 ? page : 1
+      this.setState({
+        current: page
+      }, () => {
+        this.getArticle()
+      })
+    } else {
+      this.getArticle()
+    }
+
   }
   render() {
     return (
@@ -36,6 +60,7 @@ class Article extends Component {
         <div className="article-list">
           {this.state.articleLists.map((article) => <Item key={article.name + Math.random()} data={article} />)}
         </div>
+        <Pagination defaultCurrent={this.state.current} defaultPageSize={10} total={this.state.allPages * 10} size="large" />
       </div>
     )
   }

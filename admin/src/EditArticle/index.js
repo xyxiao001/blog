@@ -62,6 +62,10 @@ class EditArticle extends Component {
     }
   }
 
+  componentDidMount() {
+    window.scroll(0, 0)
+  }
+
   updateName(e) {
     var obj = Object.assign({}, this.state.info)
     obj.name = e.target.value
