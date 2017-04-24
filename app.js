@@ -62,6 +62,13 @@ app.get('/article', (req, res) => {
     })
     return false
   }
+
+  // 每页条数
+  let limit = 10
+  if (req.query.limit) {
+    limit = ~~(req.query.limit)
+    limit = limit > 0 ? limit : 5
+  }
   article.find().sort({'time': -1}).exec((error, data) => {
     if (error) {
       return res.json({
@@ -70,8 +77,6 @@ app.get('/article', (req, res) => {
       })
       console.log(error)
     } else {
-      // 每页条数
-      let limit = 10
       let all = data.length
       // 算出总页数
       let allPages = Math.ceil(all / limit)
@@ -91,8 +96,8 @@ app.get('/article', (req, res) => {
         } else {
           // 处理文章
           var lists = data.map((item, index) => {
-            if (item.content.length > 350) {
-              item.content = item.content.substring(0, 350)
+            if (item.content.length > 200) {
+              item.content = item.content.substring(0, 200) + '...'
             }
             return item
           })

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import Dashboard from '@/view/Dashboard'
+import Detail from '@/view/ArticleDetail'
 
 Vue.use(Router)
 
@@ -9,8 +10,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      name: 'Dashboard',
+      component: Dashboard
+    },
+    {
+      path: '/detail',
+      name: 'Detail',
+      component: Detail
     }
   ]
 })
