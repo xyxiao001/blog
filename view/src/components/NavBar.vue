@@ -26,8 +26,8 @@ export default {
 
   .icon {
     display: inline-block;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     overflow: hidden;
   }
 

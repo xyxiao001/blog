@@ -4,9 +4,14 @@
       <NavBar></NavBar>
     </header>
     <div class="page-content">
+      <div class="user-info">
+        <a href="https://github.com/xyxiao001" target="_blank" title="goodboy">
+          <img src="http://ofyaji162.bkt.clouddn.com/touxiang.jpg"><img>
+        </a>
+      </div>
       <div class="article-list">
         <div v-for="item in lists">
-          <ArticleItem :item="item"></ArticleItem>
+          <ArticleItem :item="item" :title="item.name"></ArticleItem>
         </div>
       </div>
     </div>
@@ -57,5 +62,29 @@ export default {
     max-width: 900px;
     margin: auto;
     word-wrap: break-word;
+  }
+
+  .user-info a {
+    display: block;
+    margin: auto;
+    width: 100px;
+    animation: fade-in-down 0.5s ease-out;
+  }
+
+  .user-info img {
+    width: 100%;
+    border-radius: 100%;
+  }
+
+  @keyframes fade-in-down {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, -50px, 0);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
   }
 </style>
