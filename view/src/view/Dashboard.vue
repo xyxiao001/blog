@@ -44,6 +44,7 @@ export default {
     }
   },
   mounted () {
+    document.title = 'goodboy 其实我是一个好人'
     this.getArticle()
   }
 }
@@ -53,7 +54,7 @@ export default {
   .page-content {
     position: relative;
     width: 80%;
-    max-width: 710px;
+    max-width: 900px;
     margin: auto;
     word-wrap: break-word;
   }
