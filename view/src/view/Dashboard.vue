@@ -87,4 +87,10 @@ export default {
       transform: translate3d(0, 0, 0);
     }
   }
+
+  @media screen and (max-width: 800px) {
+    .page-content {
+      width: 95%;
+    }
+  }
 </style>

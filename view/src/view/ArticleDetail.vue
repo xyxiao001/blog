@@ -88,4 +88,10 @@ export default {
   line-height: 40px;
   color: gray;
 }
+
+@media screen and (max-width: 800px) {
+  .article-detail header h1 {
+    font-size: 25px;
+  }
+}
 </style>

@@ -34,4 +34,10 @@ export default {
   .icon img {
     width: 100%;
   }
+
+  @media screen and (max-width: 800px) {
+    .navbar {
+      padding: 5px  5px 0 5px;
+    }
+  }
 </style>
