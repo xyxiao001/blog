@@ -75,6 +75,7 @@ export default {
     }
   },
   created () {
+    window.scrollTo(0, 0)
     if (this.$route.query.id) {
       this.id = this.$route.query.id
     }
