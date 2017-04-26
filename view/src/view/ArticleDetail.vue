@@ -2,13 +2,14 @@
   <div class="page-wrapper">
     <NavBar></NavBar>
     <div class="page-content">
-      <div class="article-detail">
+      <div class="article-detail" v-show="!loading">
         <header>
           <h1>{{detail.name}}</h1>
           <p>{{time}}</p>
         </header>
         <div class="markdown-body" ref="content" v-html="html"></div>
       </div>
+      <Loading v-show="loading"></Loading>
     </div>
     <Foot></Foot>
   </div>
@@ -20,10 +21,13 @@ import Highlight from 'highlight.js'
 import Moment from 'moment'
 import NavBar from '@/components/NavBar'
 import Foot from '@/components/Foot'
+import Loading from '@/components/Loading'
+
 export default {
   data: function () {
     return {
       id: '',
+      loading: true,
       detail: {
         name: '',
         time: '',
@@ -51,7 +55,8 @@ export default {
   },
   components: {
     NavBar,
-    Foot
+    Foot,
+    Loading
   },
   methods: {
     getArticleDetail () {
@@ -59,10 +64,12 @@ export default {
       this.$axios.get('/article?id=' + this.id)
       .then(function (response) {
         // console.log(response)
+        that.loading = false
         that.detail = response.data.data
         document.title = response.data.data.name
       })
       .catch(function (error) {
+        that.loading = false
         console.log(error)
       })
     }

@@ -9,12 +9,13 @@
           <img src="http://ofyaji162.bkt.clouddn.com/touxiang.jpg"><img>
         </a>
       </div>
-      <div class="article-list">
+      <div class="article-list" v-show="!loading">
         <div v-for="item in lists">
           <ArticleItem :item="item" ></ArticleItem>
         </div>
       </div>
-      <Pagination :current="page" :allPages="allPages" @onChangePage="changePage"></Pagination>
+      <Loading v-show="loading"></Loading>
+      <Pagination :current="page" :allPages="allPages" @onChangePage="changePage" v-show="!loading"></Pagination>
     </div>
     <Foot></Foot>
   </div>
@@ -25,12 +26,14 @@ import NavBar from '@/components/NavBar'
 import ArticleItem from '@/components/ArticleItem'
 import Pagination from '@/components/Pagination'
 import Foot from '@/components/Foot'
+import Loading from '@/components/Loading'
 export default {
   data () {
     return {
       lists: [],
       limit: 5,
       page: 1,
+      loading: true,
       allPages: 0
     }
   },
@@ -38,7 +41,8 @@ export default {
     NavBar,
     ArticleItem,
     Pagination,
-    Foot
+    Foot,
+    Loading
   },
   methods: {
     getArticle () {
@@ -46,11 +50,13 @@ export default {
       this.$axios.get('/article?page=' + that.page + '&limit=' + that.limit)
       .then(function (response) {
         // console.log(response)
+        that.loading = false
         that.allPages = response.data.allPages
         that.page = that.page > that.allPages ? that.allPages : that.page
         that.lists = response.data.data
       })
       .catch(function (error) {
+        that.loading = false
         console.log(error)
       })
     },
@@ -62,6 +68,7 @@ export default {
       this.$router.go(1)
       this.page = page
       window.scrollTo(0, 0)
+      this.loading = true
       this.getArticle()
     }
   },
