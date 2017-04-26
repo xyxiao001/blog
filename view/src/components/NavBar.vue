@@ -21,7 +21,7 @@ export default {
 
 <style scoped>
   .navbar {
-    padding: 20px  20px 0 20px;
+    padding: 20px  20px 20px 20px;
   }
 
   .icon {
@@ -37,7 +37,7 @@ export default {
 
   @media screen and (max-width: 800px) {
     .navbar {
-      padding: 5px  5px 0 5px;
+      padding: 10px;
     }
   }
 </style>

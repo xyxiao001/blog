@@ -21,6 +21,10 @@ a, a:hover a:focus {
   text-decoration: none;
 }
 
+li {
+  list-style: none;
+}
+
 #app {
   font-family: Helvetica Neue For Number,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif;
   line-height: 1.5;

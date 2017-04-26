@@ -10,6 +10,7 @@
         <div class="markdown-body" ref="content" v-html="html"></div>
       </div>
     </div>
+    <Foot></Foot>
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import Marked from 'marked'
 import Highlight from 'highlight.js'
 import Moment from 'moment'
 import NavBar from '@/components/NavBar'
+import Foot from '@/components/Foot'
 export default {
   data: function () {
     return {
@@ -48,7 +50,8 @@ export default {
     }
   },
   components: {
-    NavBar
+    NavBar,
+    Foot
   },
   methods: {
     getArticleDetail () {
@@ -64,7 +67,7 @@ export default {
       })
     }
   },
-  mounted () {
+  created () {
     if (this.$route.query.id) {
       this.id = this.$route.query.id
     }

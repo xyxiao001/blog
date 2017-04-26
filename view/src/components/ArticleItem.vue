@@ -1,17 +1,17 @@
 <template>
   <article class="article-item">
     <router-link :to="{path: '/detail', query: {'id': item._id}}">
-      <h1 class="article-title">{{item.name}}</h1>
-      <section class="article-content">
-        {{item.content}}
-      </section>
-      <footer class="article-footer">
-        <div class="article-des">
-          <span>goodboy · </span>
-          <span class="time" :data-time="realTime">{{ time }}</span>
-        </div>
-      </footer>
+      <h1 class="article-title" :title="item.name">{{item.name}}</h1>
     </router-link>
+    <section class="article-content">
+      <p>{{ item.content}}</p>
+    </section>
+    <footer class="article-footer">
+      <div class="article-des">
+        <span>goodboy · </span>
+        <span class="time" :data-time="realTime">{{ time }}</span>
+      </div>
+    </footer>
   </article>
 </template>
 
@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
   .article-item {
-    cursor: pointer;
+    /*cursor: pointer;*/
     margin-bottom: 40px;
   }
 
@@ -50,7 +50,7 @@ export default {
 
   .article-content {
     margin: 10px 0;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 2;
     max-height: 90px;
     overflow: hidden;
@@ -91,4 +91,10 @@ export default {
   /*.article-item:hover .time::after {
     transform: translate3d(0, 0, 0);
   }*/
+
+  @media screen and (max-width: 800px) {
+    .article-content {
+      font-size: 14px;
+    }
+  }
 </style>
