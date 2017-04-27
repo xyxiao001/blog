@@ -1,0 +1,84 @@
+.login {
+  display: flex;
+  flex: 1;
+  /*水平居中*/
+  justify-content: center;
+  box-align: center;
+  /*垂直居中*/
+  align-items: center;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: white;
+  background-image: url(http://op0ee5hn4.bkt.clouddn.com/bg1.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50%;
+}
+
+.login-box {
+  display: flex;
+  position: relative;
+  width: 350px;
+  height: 280px;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 30px 40px;
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: height .3s;
+  opacity: .95;
+}
+
+.login-box .title {
+  text-align: center;
+  font-size: 18px;
+  color: #bbcd93;
+}
+
+.form-item {
+  position: relative;
+  margin: 18px 0 10px 0;
+}
+
+.form-item label {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  font-size: 14px;
+  transform: translate3d(0,-50%,0);
+  color: #868686;
+  transition: all .3s;
+}
+
+.form-item input {
+  width: 100%;
+  position: relative;
+  padding: 8px 0;
+  color: #fffffb;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.form-item::after {
+  content: "";
+  height: 2px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: hsla(0,0%,100%,.16);
+}
+
+.label.shirk {
+  font-size: 12px;
+  top: -15px;
+  transform: translateZ(0);
+}
+
+.go-login {
+  line-height: 25px;
+  margin-top: 25px;
+}
