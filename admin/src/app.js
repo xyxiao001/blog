@@ -7,6 +7,7 @@ import Test from './Test'
 import Login from './Login'
 import autoLogin from './isLogin'
 
+import { message } from 'antd'
 // 引入公用css
 import './app.css'
 
@@ -31,9 +32,27 @@ export default class App extends Component {
     }
   }
   componentWillMount() {
+    var that = this
     var token = window.localStorage.getItem('token')
     if (token) {
       console.log('token 存在 向后台请求验证token')
+      window.axios.post('/tokenAuto', {
+        token: token
+      })
+      .then(function (response) {
+          if (response.data.status !== 1) {
+            message.error(response.data.msg)
+            autoLogin.signout(() => {
+              that.setState({
+                login: false
+              })
+            })
+          }
+      })
+      .catch(function (error) {
+        message.error('请求失败！')
+        console.log(error)
+      })
     } else {
       console.log('token 不存在, 重新登录!')
       autoLogin.signout(() => {

@@ -19,6 +19,7 @@ class Login extends Component {
     this.updateName = this.updateName.bind(this)
     this.updatePassword = this.updatePassword.bind(this)
     this.login = this.login.bind(this)
+    this.rule = this.rule.bind(this)
   }
   updateName(e) {
     this.setState({
@@ -30,7 +31,23 @@ class Login extends Component {
       password: e.target.value
     })
   }
+  rule() {
+    var name = this.state.username.replace(/(^\s*)|(\s*$)/g, '')
+    var password = this.state.password.replace(/(^\s*)|(\s*$)/g, '')
+    if (name.length === 0) {
+      message.error('用户名不能为空')
+      return false
+    }
+    if (password.length === 0) {
+      message.error('密码不能为空')
+      return false
+    }
+    return true
+  }
   login () {
+    if(!this.rule()) {
+      return false
+    }
     var that = this
     var data = {
       username: this.state.username,
@@ -40,7 +57,7 @@ class Login extends Component {
     .then(function (response) {
       if (response.data.status === 1) {
         message.success(response.data.msg)
-        window.localStorage.setItem('token', 'test')
+        window.localStorage.setItem('token', response.data.token)
         autoLogin.singin(() => {
           that.setState({
             redirectToReferrer: true

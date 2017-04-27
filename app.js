@@ -4,6 +4,7 @@ import config from './config'
 import user from './models/user'
 import article from './models/article'
 import bodyParser from 'body-parser'
+import moment from 'moment'
 import jwt from 'jwt-simple'
 
 const app = express()
@@ -71,13 +72,47 @@ app.post('/login', (req, res) => {
         })
       }
 
-      // 表明存在用户
+      // 表明存在用户, 登录成功生成token
+      // 过期时间
+      var expires = moment().add(7, 'd').valueOf('')
+      var token = jwt.encode({
+        iss: data._id,
+        exp: expires
+      }, app.get('jwtTokenSecret'))
+
       return res.json({
         status: 1,
+        token: token,
         msg: '登陆成功'
       })
     }
   })
+})
+
+// 校验token
+app.post('/tokenAuto', (req, res) => {
+  var token = req.body.token
+  try {
+    var decoded = jwt.decode(token, app.get('jwtTokenSecret'))
+    // 判断时间是否过期
+    var now = Date.parse(new Date)
+    if (decoded.exp < now) {
+      return res.json({
+        status: 0,
+        msg: 'token 已过期'
+      })
+    } else {
+      return res.json({
+        status: 1,
+        msg: 'token正常'
+      })
+    }
+  } catch (e) {
+    return res.json({
+      status: 0,
+      msg: 'token无效'
+    })
+  }
 })
 
 // 文章列表和详情
