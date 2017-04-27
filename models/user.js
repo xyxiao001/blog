@@ -8,6 +8,9 @@ let userSchema = new Schema({
   },
   url: {
     type: String
+  },
+  password: {
+    type: String
   }
 })
 

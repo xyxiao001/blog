@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import { Button } from 'antd'
+import { message, Button } from 'antd'
 
 // 导入css
 import './index.css'
@@ -16,14 +16,43 @@ class Login extends Component {
       username: '',
       password: ''
     }
+    this.updateName = this.updateName.bind(this)
+    this.updatePassword = this.updatePassword.bind(this)
     this.login = this.login.bind(this)
   }
+  updateName(e) {
+    this.setState({
+      username: e.target.value
+    })
+  }
+  updatePassword(e) {
+    this.setState({
+      password: e.target.value
+    })
+  }
   login () {
-    window.localStorage.setItem('token', 'test')
-    autoLogin.singin(() => {
-      this.setState({
-        redirectToReferrer: true
-      })
+    var that = this
+    var data = {
+      username: this.state.username,
+      password: this.state.password
+    }
+    window.axios.post('/login', data)
+    .then(function (response) {
+      if (response.data.status === 1) {
+        message.success(response.data.msg)
+        window.localStorage.setItem('token', 'test')
+        autoLogin.singin(() => {
+          that.setState({
+            redirectToReferrer: true
+          })
+        })
+      } else {
+        message.error(response.data.msg)
+      }
+    })
+    .catch(function (error) {
+      message.error('请求失败！')
+      console.log(error)
     })
   }
   render() {
@@ -39,10 +68,10 @@ class Login extends Component {
         <div className="login-box">
           <p className="title">admin</p>
           <div className="form-item">
-            <input type="text" placeholder="username" />
+            <input type="text" placeholder="username" onChange={this.updateName} />
           </div>
           <div className="form-item">
-            <input type="password" placeholder="password" />
+            <input type="password" placeholder="password" onChange={this.updatePassword} />
           </div>
           <Button className="go-login" type="primary" onClick={this.login}>登录</Button>
         </div>

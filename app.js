@@ -4,8 +4,12 @@ import config from './config'
 import user from './models/user'
 import article from './models/article'
 import bodyParser from 'body-parser'
+import jwt from 'jwt-simple'
 
 const app = express()
+
+// 设置jwt密钥
+app.set('jwtTokenSecret', 'goodboy')
 
 //创建一个数据库连接
 mongoose.Promise = global.Promise
@@ -32,16 +36,51 @@ app.all('*', (req, res, next) => {
   next()
 })
 
-app.get('/', (req, res) => {
-  user.findOne((error, data) => {
+// app.get('/', (req, res) => {
+//   user.findOne((error, data) => {
+//     if (error) {
+//       console.log(error)
+//     } else {
+//       return res.json(data)
+//     }
+//   })
+// })
+
+// 登录验证
+app.post('/login', (req, res) => {
+  var obj = req.body
+  user.findOne({name: obj.username}).exec((error, data) => {
     if (error) {
       console.log(error)
+      return res.json({
+        status: 0,
+        msg: '数据库查询失败'
+      })
     } else {
-      return res.json(data)
+      if(!data) {
+        return res.json({
+          status: 0,
+          msg: '用户不存在'
+        })
+      }
+
+      if (obj.password !== data.password) {
+        return res.json({
+          status: 0,
+          msg: '密码错误'
+        })
+      }
+
+      // 表明存在用户
+      return res.json({
+        status: 1,
+        msg: '登陆成功'
+      })
     }
   })
 })
 
+// 文章列表和详情
 app.get('/article', (req, res) => {
   if (req.query.id) {
     // 如果查询参数带id 那么直接返回一条的详细信息
@@ -116,6 +155,7 @@ app.get('/article', (req, res) => {
   })
 })
 
+// 更新文章
 app.post('/updateArticle', (req, res) => {
   var obj = JSON.parse(req.body.data)
   obj.time = new Date(obj.time)
