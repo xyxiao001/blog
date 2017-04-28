@@ -7,14 +7,14 @@ const createInstance = () => {
   })
 
   // 请求拦截
-  // var token = window.localStorage.getItem('token')
-  // instance.interceptors.request.use(
-	// 	(req) => {
-	// 		if (token) {
-	// 			req.headers.accessToken = token
-	// 		}
-	// 		return req
-	// })
+  var token = window.localStorage.getItem('token')
+  instance.interceptors.request.use(
+		(req) => {
+			if (token) {
+				req.headers.accessToken = token
+			}
+			return req
+	})
 
   // 响应拦截
   // instance.interceptors.response.use(
@@ -23,16 +23,9 @@ const createInstance = () => {
   //   },
   //   (err) => {
   //     console.log(err)
-  //     try {
-  //       return Promise.reject(err.response.data)
-  //     } catch(err) {
-  //       console.log(err)
-  //       return Promise.reject({
-  //         success: false,
-  //         message: '未知错误'
-  //       })
-  //     }
-  // })
+  //     return err
+  //   }
+  // )
 
   return instance
 }

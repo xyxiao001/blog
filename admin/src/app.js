@@ -54,7 +54,7 @@ export default class App extends Component {
         console.log(error)
       })
     } else {
-      console.log('token 不存在, 重新登录!')
+      message.error('token 不存在, 重新登录!')
       autoLogin.signout(() => {
         this.setState({
           login: false
