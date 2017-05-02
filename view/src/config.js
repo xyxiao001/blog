@@ -5,7 +5,7 @@ if (process.env.NODE_ENV === 'development') {
   }
 } else {
   obj = {
-    host: 'https://xyxiao.cn'
+    host: 'http://118.89.161.85:8888'
   }
 }
 export default obj
