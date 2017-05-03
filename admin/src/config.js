@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'development') {
   }
 } else {
   obj = {
-    host: 'http://118.89.161.85:8888'
+    host: '/api'
   }
 }
 export default obj
