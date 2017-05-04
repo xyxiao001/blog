@@ -91,6 +91,10 @@ export default {
   margin-bottom: 20px;
 }
 
+.article-detail header {
+  margin-bottom: 50px;
+}
+
 .article-detail header h1 {
   font-size: 35px;
 }
