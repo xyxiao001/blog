@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
+import { HashRouter, Route, Redirect } from 'react-router-dom'
 
 // 导入页面
 import Dashboard from './Dashboard'
@@ -64,14 +64,14 @@ export default class App extends Component {
   }
   render() {
     return (
-      <BrowserRouter basename="/admin/">
+      <HashRouter basename="/admin/">
         <div className="page">
           <Route exact path="/" render={() => <Redirect to="/dashboard" />}/>
           <Route path="/login" component={Login} />
           <PrivateRoute path="/dashboard" component={Dashboard} />
           <Route path="/Test" component={Test} />
         </div>
-      </BrowserRouter>
+      </HashRouter>
     )
   }
 }
