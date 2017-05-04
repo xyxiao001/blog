@@ -64,7 +64,7 @@ export default class App extends Component {
   }
   render() {
     return (
-      <HashRouter basename="/admin/">
+      <HashRouter basename="/">
         <div className="page">
           <Route exact path="/" render={() => <Redirect to="/dashboard" />}/>
           <Route path="/login" component={Login} />
