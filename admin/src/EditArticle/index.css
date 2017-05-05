@@ -40,7 +40,7 @@
 .preview {
   width: 50%;
   height: 760px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .preview .title{
