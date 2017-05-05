@@ -1,8 +1,42 @@
 <template>
   <footer>
-    <p>goodboy @2017</p>
+    <p>goodboy @2017 博客浏览量 {{ view }} 次</p>
   </footer>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      add: true,
+      view: 0
+    }
+  },
+  created () {
+    // 需要判断今天是否请求过
+    var blogView = JSON.parse(window.localStorage.getItem('blogView'))
+    var updateDateDay = (new Date()).getDay()
+    if (blogView && (new Date(blogView.time)).getDay() === updateDateDay) {
+      this.add = false
+    }
+    var that = this
+    this.$axios('/addPageView?name=total&add=' + this.add)
+    .then(function (response) {
+      if (response.data.status === 1) {
+        that.view = response.data.view
+      }
+      // 存数据
+      window.localStorage.setItem('blogView', JSON.stringify({
+        time: new Date(),
+        view: response.data.view
+      }))
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+  }
+}
+</script>
 
 <style scoped>
   footer {

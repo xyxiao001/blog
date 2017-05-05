@@ -1,11 +1,14 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import config from './config'
-import user from './models/user'
-import article from './models/article'
 import bodyParser from 'body-parser'
 import moment from 'moment'
 import jwt from 'jwt-simple'
+
+// 表
+import user from './models/user'
+import article from './models/article'
+import pageView from './models/pageView'
 
 const app = express()
 
@@ -256,6 +259,61 @@ app.post('/deleteArticle', (req, res) => {
   }
 })
 
+// 总浏览量增加
+app.get('/addPageView', (req, res) => {
+  var name = req.query.name ? req.query.name : 'total'
+  var add = req.query.add
+  if (add === 'false') {
+    pageView.findOne({name: 'total'}).exec((error, data) => {
+      if (error) {
+        return res.json({
+          status: 0,
+          msg: '查询浏览量失败'
+        })
+      } else {
+        return res.json({
+          status: 1,
+          view: data.view,
+          msg: '查询浏览量'
+        })
+      }
+    })
+  } else {
+    pageView.update({name: name}, {'$inc': {view: 1}}).exec((error, data) => {
+      if (error) {
+        return res.json({
+          status: 0,
+          msg: '增加浏览量失败'
+        })
+      } else {
+        pageView.findOne({name: name}).exec((error, data) => {
+          if (error) {
+            return res.json({
+              status: 0,
+              msg: '增加浏览量失败'
+            })
+          } else {
+            if (data) {
+              return res.json({
+                status: 1,
+                view: data.view,
+                msg: '增加浏览量成功'
+              })
+            } else {
+              var newView = new pageView({name: name, view: 1})
+              newView.save()
+              return res.json({
+                status: 1,
+                view: 1,
+                msg: '增加浏览量成功'
+              })
+            }
+          }
+        })
+      }
+    })
+  }
+})
 
 const server = app.listen(config.port, function() {
 	console.log(`The server is already started, Listen on port ${config.port}!`)

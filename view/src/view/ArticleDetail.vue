@@ -5,7 +5,10 @@
       <div class="article-detail" v-show="!loading">
         <header>
           <h1>{{detail.name}}</h1>
-          <p>{{time}}</p>
+          <p>
+            <span>{{time}}</span>
+            <span class="viewNum"> 浏览 {{ view }} 次</span>
+          </p>
         </header>
         <div class="markdown-body" ref="content" v-html="html"></div>
       </div>
@@ -27,6 +30,7 @@ export default {
   data: function () {
     return {
       id: '',
+      view: 0,
       loading: true,
       detail: {
         name: '',
@@ -75,11 +79,21 @@ export default {
     }
   },
   created () {
+    var that = this
     window.scrollTo(0, 0)
     if (this.$route.query.id) {
       this.id = this.$route.query.id
     }
     this.getArticleDetail()
+    this.$axios('/addPageView?name=' + this.id + '&add=true')
+    .then(function (response) {
+      if (response.data.status === 1) {
+        that.view = response.data.view
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
   }
 }
 </script>
@@ -99,10 +113,11 @@ export default {
   font-size: 35px;
 }
 
-.article-detail header p {
+.article-detail header span {
   line-height: 40px;
   color: gray;
 }
+
 
 @media screen and (max-width: 800px) {
   .article-detail header h1 {
