@@ -20,7 +20,7 @@
 
 <script>
 import Marked from 'marked'
-import Highlight from 'highlight.js'
+import '@/assets/highlight.pack.js'
 import Moment from 'moment'
 import NavBar from '@/components/NavBar'
 import Foot from '@/components/Foot'
@@ -44,7 +44,7 @@ export default {
     html () {
       this.$nextTick(() => {
         document.querySelectorAll('.markdown-body code').forEach((val, index) => {
-          Highlight.highlightBlock(val)
+          window.hljs.highlightBlock(val)
         })
       })
     }
@@ -100,6 +100,7 @@ export default {
 
 <style scoped>
 @import url("../assets/markdown.css");
+@import url("../assets/highlight.css");
 
 .article-detail {
   margin-bottom: 20px;

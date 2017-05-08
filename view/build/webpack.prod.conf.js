@@ -94,7 +94,9 @@ var webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ])
+    ]),
+    // 解决momnet打包所有语言的问题
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn/)
   ]
 })
 
