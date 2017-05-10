@@ -1,13 +1,14 @@
 <template>
   <div class="comment">
     <p style="line-height: 30px;">发表评论：</p>
+    <input type="text" class="x-input" v-model="username" placeholder="你的昵称呢？" />
     <div
       class="comment-edit"
       contenteditable="true"
       @keyup="changeComment"
       @mouseup="changeComment"
       ref="commentEdit"
-      :data-comment="comment.length + '/300'"
+      :data-comment="comment.length + '/ 1000'"
       ></div>
     <div class="comment-control">
       <i class="iconfont icon-icon" @click.stop="emoji = !emoji"></i>
@@ -19,7 +20,7 @@
           <img :src='"http://opq9z7jxu.bkt.clouddn.com/" + (25 +j) + ".jpg"' />
         </a>
       </div>
-      <button class="x-btn">发表</button>
+      <button class="x-btn" @click="addComment">发表</button>
     </div>
   </div>
 </template>
@@ -29,6 +30,7 @@ export default {
   data: function () {
     return {
       emoji: false,
+      username: '',
       comment: ''
     }
   },
@@ -39,7 +41,25 @@ export default {
 
     chooseEmoji (e) {
       this.editInsert(this.$refs.commentEdit, e.target.parentNode.innerHTML)
+      this.comment = this.$refs.commentEdit.innerHTML
       this.emoji = !this.emoji
+    },
+
+    addComment () {
+      let that = this
+      this.$axios.post('/addComment', {
+        id: this.$route.query.id,
+        username: that.username,
+        comment: that.comment
+      })
+      .then(function (response) {
+        that.username = ''
+        that.comment = ''
+        that.$refs.commentEdit.innerHTML = ''
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
     },
 
     editInsert (obj, str) {
@@ -73,7 +93,7 @@ export default {
   .comment-edit {
     position: relative;
     line-height: 20px;
-    padding: 3px 8px 5px;
+    padding: 3px 8px 20px 8px;
     background: none;
     font-size: 14px;
     box-shadow: inset 0 2px 4px 0 rgba(0,0,0,.04);
@@ -90,7 +110,7 @@ export default {
   }
 
   .comment-edit::after {
-    display: none;
+    /*display: none;*/
     content: attr(data-comment);
     position: absolute;
     right: 5px;
@@ -166,6 +186,25 @@ export default {
     color: white;
     background-color: #108ee9;
     border-color: #108ee9;
+    outline: 0;
+  }
+
+  .x-input {
+    position: relative;
+    display: inline-block;
+    margin: 5px 0px;
+    padding: 4px 7px;
+    width: 150px;
+    height: 25px;
+    cursor: text;
+    font-size: 14px;
+    line-height: 1.2;
+    color: rgba(0,0,0,.65);
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    transition: all .3s;
     outline: 0;
   }
 </style>

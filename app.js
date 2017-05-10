@@ -9,6 +9,7 @@ import jwt from 'jwt-simple'
 import user from './models/user'
 import article from './models/article'
 import pageView from './models/pageView'
+import comment from './models/comment'
 
 const app = express()
 
@@ -259,7 +260,7 @@ app.post('/deleteArticle', (req, res) => {
   }
 })
 
-// 总浏览量增加
+// 浏览量增加
 app.get('/addPageView', (req, res) => {
   var name = req.query.name ? req.query.name : 'total'
   var add = req.query.add
@@ -313,6 +314,66 @@ app.get('/addPageView', (req, res) => {
       }
     })
   }
+})
+
+// 新增评论
+app.post('/addComment', (req, res) => {
+  // 先去看看评论表里面是否有这个id
+  comment.findOne({articleId: req.body.id}).exec((error, data) => {
+    if (error) {
+      return res.json({
+        status: 0,
+        msg: '评论失败'
+      })
+    } else {
+      if (data) {
+        comment.update({articleId: req.body.id}, {$push: {comments: {
+          username: req.body.username,
+          comment: req.body.comment,
+          requestname: req.body.requestname
+        }}}).exec((error, data) => {
+          if (error) {
+            return res.json({
+              status: 0,
+              msg: '评论失败'
+            })
+          }
+          return res.json({
+            status: 1,
+            msg: '评论成功'
+          })
+        })
+      } else {
+        var newComment = new comment({articleId: req.body.id, comments:[{
+          username: req.body.username,
+          comment: req.body.comment,
+          requestname: req.body.requestname
+        }]})
+        newComment.save()
+        return res.json({
+          status: 1,
+          msg: '评论成功'
+        })
+      }
+    }
+  })
+})
+
+// 获取评论
+app.get('/getComment', (req, res) => {
+  comment.findOne({articleId: req.query.id}).exec((error, data) => {
+    if (error) {
+      return res.json({
+        status: 0,
+        msg: '获取评论失败'
+      })
+    }
+    return res.json({
+      status: 1,
+      data: data.comments,
+      msg: '获取评论成功'
+    })
+  })
 })
 
 const server = app.listen(config.port, function() {
