@@ -9,7 +9,7 @@
           <img src="http://ofyaji162.bkt.clouddn.com/touxiang.jpg"><img>
         </a>
       </div>
-      <div class="article-list" v-show="!loading">
+      <div class="article-list" v-show="!loading" ref="articleList">
         <div v-for="item in lists">
           <ArticleItem :item="item" ></ArticleItem>
         </div>
@@ -49,11 +49,23 @@ export default {
       let that = this
       this.$axios.get('/article?page=' + that.page + '&limit=' + that.limit)
       .then(function (response) {
-        // console.log(response)
         that.loading = false
         that.allPages = response.data.allPages
         that.page = that.page > that.allPages ? that.allPages : that.page
         that.lists = response.data.data
+        that.$nextTick(() => {
+          that.$show.reveal('.article-item', {
+            container: that.$refs.articleList,
+            duration: 800,
+            dealy: 200,
+            scale: 0,
+            origin: 'top',
+            distance: '30px',
+            reset: true,
+            rotate: { x: 0, y: 0, z: 0 }
+          }, 200)
+          that.$show.sync()
+        })
       })
       .catch(function (error) {
         that.loading = false
@@ -69,10 +81,12 @@ export default {
       this.page = page
       window.scrollTo(0, 0)
       this.loading = true
-      this.getArticle()
+      this.$nextTick(() => {
+        this.getArticle()
+      })
     }
   },
-  mounted () {
+  created () {
     document.title = 'goodboy 其实我是一个好人'
     this.page = this.$route.query.page ? ~~(this.$route.query.page) : 1
     this.$nextTick(() => {

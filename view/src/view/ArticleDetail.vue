@@ -45,6 +45,14 @@ export default {
       this.$nextTick(() => {
         document.querySelectorAll('.markdown-body code').forEach((val, index) => {
           window.hljs.highlightBlock(val)
+          this.$show.reveal('.markdown-body', {
+            duration: 1000,
+            dealy: 200,
+            scale: 0,
+            origin: 'top',
+            distance: '10px',
+            rotate: { x: 0, y: 0, z: 0 }
+          }, 1000)
         })
       })
     }
@@ -71,6 +79,13 @@ export default {
         that.loading = false
         that.detail = response.data.data
         document.title = response.data.data.name
+        that.$show.reveal('.article-detail header', {
+          duration: 1000,
+          dealy: 500,
+          scale: 0,
+          origin: 'top',
+          distance: '20px'
+        }, 500)
       })
       .catch(function (error) {
         that.loading = false
