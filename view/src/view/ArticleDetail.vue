@@ -49,8 +49,9 @@ export default {
             duration: 1000,
             dealy: 200,
             scale: 0,
-            origin: 'top',
+            origin: 'bottom',
             distance: '10px',
+            mobile: false,
             rotate: { x: 0, y: 0, z: 0 }
           }, 1000)
         })

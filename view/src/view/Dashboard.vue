@@ -59,7 +59,7 @@ export default {
             duration: 800,
             dealy: 200,
             scale: 0,
-            origin: 'top',
+            origin: 'bottom',
             distance: '30px',
             reset: true,
             rotate: { x: 0, y: 0, z: 0 }
