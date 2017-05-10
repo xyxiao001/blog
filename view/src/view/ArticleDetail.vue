@@ -13,6 +13,7 @@
         <div class="markdown-body" ref="content" v-html="html"></div>
       </div>
       <Loading v-show="loading"></Loading>
+      <Comment></Comment>
     </div>
     <Foot></Foot>
   </div>
@@ -26,6 +27,7 @@ import NavBar from '@/components/NavBar'
 import Foot from '@/components/Foot'
 import Loading from '@/components/Loading'
 import ScrollReveal from 'scrollreveal'
+import Comment from '@/components/Comment'
 
 export default {
   data: function () {
@@ -53,8 +55,7 @@ export default {
             scale: 0,
             origin: 'bottom',
             distance: '10px',
-            mobile: false,
-            rotate: { x: 0, y: 0, z: 0 }
+            viewFactor: 0
           }, 1000)
         })
       })
@@ -71,7 +72,8 @@ export default {
   components: {
     NavBar,
     Foot,
-    Loading
+    Loading,
+    Comment
   },
   methods: {
     getArticleDetail () {
@@ -88,7 +90,7 @@ export default {
           scale: 0,
           origin: 'top',
           distance: '20px',
-          mobile: false
+          viewFactor: 0
         }, 500)
       })
       .catch(function (error) {
