@@ -27,6 +27,7 @@ import ArticleItem from '@/components/ArticleItem'
 import Pagination from '@/components/Pagination'
 import Foot from '@/components/Foot'
 import Loading from '@/components/Loading'
+import ScrollReveal from 'scrollreveal'
 export default {
   data () {
     return {
@@ -34,7 +35,8 @@ export default {
       limit: 5,
       page: 1,
       loading: true,
-      allPages: 0
+      allPages: 0,
+      scrollReveal: ScrollReveal()
     }
   },
   components: {
@@ -54,7 +56,7 @@ export default {
         that.page = that.page > that.allPages ? that.allPages : that.page
         that.lists = response.data.data
         that.$nextTick(() => {
-          that.$show.reveal('.article-item', {
+          that.scrollReveal.reveal('.article-item', {
             container: that.$refs.articleList,
             duration: 800,
             dealy: 200,
@@ -64,7 +66,7 @@ export default {
             reset: true,
             rotate: { x: 0, y: 0, z: 0 }
           }, 200)
-          that.$show.sync()
+          that.scrollReveal.sync()
         })
       })
       .catch(function (error) {

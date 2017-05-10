@@ -25,6 +25,7 @@ import Moment from 'moment'
 import NavBar from '@/components/NavBar'
 import Foot from '@/components/Foot'
 import Loading from '@/components/Loading'
+import ScrollReveal from 'scrollreveal'
 
 export default {
   data: function () {
@@ -37,7 +38,8 @@ export default {
         time: '',
         tags: [],
         content: ''
-      }
+      },
+      scrollReveal: ScrollReveal()
     }
   },
   watch: {
@@ -45,7 +47,7 @@ export default {
       this.$nextTick(() => {
         document.querySelectorAll('.markdown-body code').forEach((val, index) => {
           window.hljs.highlightBlock(val)
-          this.$show.reveal('.markdown-body', {
+          this.scrollReveal.reveal('.markdown-body', {
             duration: 1000,
             dealy: 200,
             scale: 0,
@@ -80,12 +82,13 @@ export default {
         that.loading = false
         that.detail = response.data.data
         document.title = response.data.data.name
-        that.$show.reveal('.article-detail header', {
+        that.scrollReveal.reveal('.article-detail header', {
           duration: 1000,
           dealy: 500,
           scale: 0,
           origin: 'top',
-          distance: '20px'
+          distance: '20px',
+          mobile: false
         }, 500)
       })
       .catch(function (error) {
