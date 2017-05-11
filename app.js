@@ -336,9 +336,9 @@ app.post('/addComment', (req, res) => {
     } else {
       if (data) {
         comment.update({articleId: req.body.id}, {$push: {comments: {
-          username: req.body.username,
+          username: xss(req.body.username),
           comment: xss(req.body.comment),
-          requestname: req.body.requestname,
+          requestname: xss(req.body.requestname),
           time: new Date()
         }}}).exec((error, data) => {
           if (error) {
