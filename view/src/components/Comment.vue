@@ -23,7 +23,7 @@
       <button class="x-btn" @click="addComment" v-if="canAdd">发表</button>
       <button class="x-btn btn-disabled" v-else>发表</button>
     </div>
-    <div class="comment-list">
+    <div class="comment-list" ref="commentList">
       <p>评论列表：</p>
       <div class="comment-item" v-for="item in comments">
         <p class="c-title">{{ item.username }}</p>
@@ -36,6 +36,8 @@
 
 <script>
 import Moment from 'moment'
+import ScrollReveal from 'scrollreveal'
+
 export default {
   data: function () {
     return {
@@ -46,11 +48,13 @@ export default {
       comment: '',
       page: 1,
       limit: 5,
+      scrollReveal: ScrollReveal(),
       comments: []
     }
   },
   watch: {
     username () {
+      this.username = this.username.replace(/(^\s*)|(\s*$)/g, '')
       if (this.username.length > 0 && this.comment.length > 0 && this.comment.length < 1000) {
         this.canAdd = true
       } else {
@@ -133,6 +137,19 @@ export default {
             })
           })
         }
+        that.$nextTick(() => {
+          that.scrollReveal.reveal('.comment-item', {
+            container: that.$refs.commentList,
+            duration: 600,
+            dealy: 200,
+            scale: 0,
+            origin: 'bottom',
+            distance: '30px',
+            reset: true,
+            rotate: { x: 0, y: 0, z: 0 }
+          }, 200)
+          that.scrollReveal.sync()
+        })
       })
       .catch((error) => {
         console.log(error)

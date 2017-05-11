@@ -13,7 +13,7 @@
         <div class="markdown-body" ref="content" v-html="html"></div>
       </div>
       <Loading v-show="loading"></Loading>
-      <Comment></Comment>
+      <Comment v-show="!loading"></Comment>
     </div>
     <Foot></Foot>
   </div>
