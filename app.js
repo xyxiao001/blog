@@ -4,6 +4,7 @@ import config from './config'
 import bodyParser from 'body-parser'
 import moment from 'moment'
 import jwt from 'jwt-simple'
+import xss from 'xss'
 
 // 表
 import user from './models/user'
@@ -336,7 +337,7 @@ app.post('/addComment', (req, res) => {
       if (data) {
         comment.update({articleId: req.body.id}, {$push: {comments: {
           username: req.body.username,
-          comment: req.body.comment,
+          comment: xss(req.body.comment),
           requestname: req.body.requestname,
           time: req.body.time
         }}}).exec((error, data) => {
@@ -354,7 +355,7 @@ app.post('/addComment', (req, res) => {
       } else {
         var newComment = new comment({articleId: req.body.id, comments:[{
           username: req.body.username,
-          comment: req.body.comment,
+          comment: xss(req.body.comment),
           requestname: null,
           time: new Date()
         }]})
@@ -379,10 +380,14 @@ app.get('/getComment', (req, res) => {
     }
     if (data) {
         // 处理数据返回
+      var page = req.query.page
+      var limit = req.query.limit
       var arr = data.comments.reverse()
+      var l = arr.length
+      var result = arr.slice((page - 1) * limit, page * limit)
       return res.json({
         status: 1,
-        data: arr,
+        data: result,
         msg: '获取评论成功'
       })
     } else {

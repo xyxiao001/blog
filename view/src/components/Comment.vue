@@ -37,6 +37,7 @@
 <script>
 import Moment from 'moment'
 import ScrollReveal from 'scrollreveal'
+import Xss from 'xss'
 
 export default {
   data: function () {
@@ -47,7 +48,7 @@ export default {
       username: '',
       comment: '',
       page: 1,
-      limit: 5,
+      limit: 15,
       scrollReveal: ScrollReveal(),
       comments: []
     }
@@ -130,7 +131,7 @@ export default {
           that.comments = response.data.data.map((item) => {
             return ({
               username: item.username,
-              comment: item.comment,
+              comment: Xss(item.comment),
               requestname: item.requestname,
               time: Moment(item.time).format('YYYY-MM-DD HH:mm:ss'),
               timeDes: Moment(item.time).fromNow()
@@ -157,6 +158,7 @@ export default {
     }
   },
   mounted () {
+    this.page = this.$route.query.page ? ~~(this.$route.query.page) : 1
     this.getComments()
     window.addEventListener('click', () => {
       if (this.emoji) {

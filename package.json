@@ -34,7 +34,8 @@
     "express": "^4.15.2",
     "jwt-simple": "^0.5.1",
     "moment": "^2.18.1",
-    "mongoose": "^4.9.4"
+    "mongoose": "^4.9.4",
+    "xss": "^0.3.3"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
