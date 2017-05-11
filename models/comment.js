@@ -8,6 +8,10 @@ let commentSchema = new Schema({
   },
   comments: {
     type: Array
+  },
+  time: {
+    type: Date,
+    default: Date.now
   }
 })
 

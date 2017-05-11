@@ -251,6 +251,13 @@ app.post('/deleteArticle', (req, res) => {
           msg: '删除失败'
         })
       } else {
+        // 同时删除相对应评论
+        comment.remove({articleId: id}).exec((error, data) => {
+          if (error) {
+            console.log('删除文章评论失败！')
+          }
+          console.log('删除文章评论成功， id:' + id)
+        })
         return res.json({
           status: 1,
           msg: '删除成功'
@@ -330,7 +337,8 @@ app.post('/addComment', (req, res) => {
         comment.update({articleId: req.body.id}, {$push: {comments: {
           username: req.body.username,
           comment: req.body.comment,
-          requestname: req.body.requestname
+          requestname: req.body.requestname,
+          time: req.body.time
         }}}).exec((error, data) => {
           if (error) {
             return res.json({
@@ -347,7 +355,8 @@ app.post('/addComment', (req, res) => {
         var newComment = new comment({articleId: req.body.id, comments:[{
           username: req.body.username,
           comment: req.body.comment,
-          requestname: req.body.requestname
+          requestname: null,
+          time: new Date()
         }]})
         newComment.save()
         return res.json({
@@ -368,11 +377,21 @@ app.get('/getComment', (req, res) => {
         msg: '获取评论失败'
       })
     }
-    return res.json({
-      status: 1,
-      data: data.comments,
-      msg: '获取评论成功'
-    })
+    if (data) {
+        // 处理数据返回
+      var arr = data.comments.reverse()
+      return res.json({
+        status: 1,
+        data: arr,
+        msg: '获取评论成功'
+      })
+    } else {
+      return res.json({
+        status: 1,
+        data: [],
+        msg: '获取评论成功'
+      })
+    }
   })
 })
 

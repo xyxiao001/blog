@@ -20,18 +20,49 @@
           <img :src='"http://opq9z7jxu.bkt.clouddn.com/" + (25 +j) + ".jpg"' />
         </a>
       </div>
-      <button class="x-btn" @click="addComment">发表</button>
+      <button class="x-btn" @click="addComment" v-if="canAdd">发表</button>
+      <button class="x-btn btn-disabled" v-else>发表</button>
+    </div>
+    <div class="comment-list">
+      <p>评论列表：</p>
+      <div class="comment-item" v-for="item in comments">
+        <p class="c-title">{{ item.username }}</p>
+        <div v-html="item.comment" class="c-content"></div>
+        <div class="c-time" :data-time="item.time">{{ item.timeDes }}</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Moment from 'moment'
 export default {
   data: function () {
     return {
       emoji: false,
+      addLoading: false,
+      canAdd: false,
       username: '',
-      comment: ''
+      comment: '',
+      page: 1,
+      limit: 5,
+      comments: []
+    }
+  },
+  watch: {
+    username () {
+      if (this.username.length > 0 && this.comment.length > 0 && this.comment.length < 1000) {
+        this.canAdd = true
+      } else {
+        this.canAdd = false
+      }
+    },
+    comment () {
+      if (this.username.length > 0 && this.comment.length > 0 && this.comment.length < 1000) {
+        this.canAdd = true
+      } else {
+        this.canAdd = false
+      }
     }
   },
   methods: {
@@ -42,20 +73,26 @@ export default {
     chooseEmoji (e) {
       this.editInsert(this.$refs.commentEdit, e.target.parentNode.innerHTML)
       this.comment = this.$refs.commentEdit.innerHTML
+      // this.$refs.commentEdit.focus()
       this.emoji = !this.emoji
     },
 
     addComment () {
       let that = this
-      this.$axios.post('/addComment', {
+      var cdata = {
         id: this.$route.query.id,
         username: that.username,
-        comment: that.comment
-      })
+        comment: that.comment,
+        time: new Date()
+      }
+      this.$axios.post('/addComment', cdata)
       .then(function (response) {
         that.username = ''
         that.comment = ''
         that.$refs.commentEdit.innerHTML = ''
+        cdata.time = Moment(cdata.time).format('YYYY-MM-DD HH:mm:ss')
+        cdata.timeDes = Moment(cdata.time).fromNow()
+        that.comments.unshift(cdata)
       })
       .catch(function (error) {
         console.log(error)
@@ -77,9 +114,33 @@ export default {
       } else {
         obj.innerHTML += str
       }
+    },
+
+    // 获取评论
+    getComments () {
+      var that = this
+      this.canAdd = false
+      this.$axios.get('getComment?id=' + this.$route.query.id + '&page=' + this.page + '&limit=' + this.limit)
+      .then((response) => {
+        if (response.data.status === 1) {
+          that.comments = response.data.data.map((item) => {
+            return ({
+              username: item.username,
+              comment: item.comment,
+              requestname: item.requestname,
+              time: Moment(item.time).format('YYYY-MM-DD HH:mm:ss'),
+              timeDes: Moment(item.time).fromNow()
+            })
+          })
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
     }
   },
   mounted () {
+    this.getComments()
     window.addEventListener('click', () => {
       if (this.emoji) {
         this.emoji = !this.emoji
@@ -121,6 +182,7 @@ export default {
   .comment-control {
     position: relative;
     padding: 8px 0px;
+    margin-bottom: 20px;
   }
 
   .comment-control button {
@@ -157,6 +219,68 @@ export default {
     width: auto;
     height: auto;
     cursor: pointer;
+  }
+
+  .comment-item {
+    padding: 20px 0;
+  }
+
+  .c-title {
+    font-size: 18px;
+    color: #333;
+    font-weight: 700;
+  }
+
+  .c-content {
+    padding: 10px 0;
+  }
+
+  .c-time {
+    position: relative;
+    display: inline-block;
+    color: #808080;
+    font-size: 14px;
+    line-height: 30px;
+  }
+
+  .c-time::before {
+    position: absolute;
+    content: '';
+    top: 22px;
+    left: 30px;
+    width: 0;
+    height: 0;
+    margin: 0 0 0 -6px;
+    font-size: 0;
+    color: rgba(0, 0, 0, .8);
+    border-bottom: 6px solid currentColor;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    visibility: hidden;
+    opacity: 0.9;
+  }
+
+  .c-time::after {
+    position: absolute;
+    top: 0;
+    content: attr(data-time);
+    top: 28px;
+    left: 30px;
+    padding: 10px 16px;
+    border-radius: 4px;
+    white-space: nowrap;
+    line-height: 1.5;
+    font-size: 13px;
+    color: #fff;
+    background: rgba(0, 0, 0, .8);
+    transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 0.9;
+    letter-spacing: 1px;
+  }
+
+  .c-time:hover::after, .c-time:hover::before {
+    visibility: visible;
   }
 </style>
 
@@ -206,5 +330,10 @@ export default {
     border-radius: 4px;
     transition: all .3s;
     outline: 0;
+  }
+
+  .btn-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 </style>

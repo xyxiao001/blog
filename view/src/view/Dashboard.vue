@@ -58,7 +58,7 @@ export default {
         that.$nextTick(() => {
           that.scrollReveal.reveal('.article-item', {
             container: that.$refs.articleList,
-            duration: 800,
+            duration: 600,
             dealy: 200,
             scale: 0,
             origin: 'bottom',
