@@ -388,12 +388,14 @@ app.get('/getComment', (req, res) => {
       return res.json({
         status: 1,
         data: result,
+        total: data.comments.length,
         msg: '获取评论成功'
       })
     } else {
       return res.json({
         status: 1,
         data: [],
+        total: 0,
         msg: '获取评论成功'
       })
     }

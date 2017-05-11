@@ -24,7 +24,7 @@
       <button class="x-btn btn-disabled" v-else>发表</button>
     </div>
     <div class="comment-list" ref="commentList">
-      <p>评论列表：</p>
+      <p><span>评论列表：</span><span class="comment-total">当前第 {{ page }} 页, 总计: {{ totalComment }} 条</span></p>
       <div class="comment-item" v-for="item in comments">
         <p class="c-title">{{ item.username }}</p>
         <div v-html="item.comment" class="c-content"></div>
@@ -47,6 +47,7 @@ export default {
       canAdd: false,
       username: '',
       comment: '',
+      totalComment: 0,
       page: 1,
       limit: 15,
       scrollReveal: ScrollReveal(),
@@ -98,6 +99,7 @@ export default {
         cdata.time = Moment(cdata.time).format('YYYY-MM-DD HH:mm:ss')
         cdata.timeDes = Moment(cdata.time).fromNow()
         that.comments.unshift(cdata)
+        that.totalComment += 1
       })
       .catch(function (error) {
         console.log(error)
@@ -128,6 +130,7 @@ export default {
       this.$axios.get('getComment?id=' + this.$route.query.id + '&page=' + this.page + '&limit=' + this.limit)
       .then((response) => {
         if (response.data.status === 1) {
+          that.totalComment = response.data.total
           that.comments = response.data.data.map((item) => {
             return ({
               username: item.username,
@@ -240,9 +243,24 @@ export default {
     cursor: pointer;
   }
 
+  .comment-list {
+    padding-top: 15px;
+  }
+
+  .comment-list>p {
+    width: 100%;
+    line-height: 35px;
+  }
+
+  .comment-total {
+    float: right;
+    color: #808080;
+  }
+
   .comment-item {
     padding: 20px 0;
   }
+
 
   .c-title {
     font-size: 18px;
