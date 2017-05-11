@@ -339,7 +339,7 @@ app.post('/addComment', (req, res) => {
           username: req.body.username,
           comment: xss(req.body.comment),
           requestname: req.body.requestname,
-          time: req.body.time
+          time: new Date()
         }}}).exec((error, data) => {
           if (error) {
             return res.json({
