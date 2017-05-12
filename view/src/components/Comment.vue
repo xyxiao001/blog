@@ -193,6 +193,7 @@ export default {
   },
   mounted () {
     this.page = this.$route.query.page ? ~~(this.$route.query.page) : 1
+    Moment.locale('zh-cn')
     this.getComments()
     window.addEventListener('click', () => {
       if (this.emoji) {

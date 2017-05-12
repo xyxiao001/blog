@@ -17,6 +17,7 @@
       <Loading v-show="loading"></Loading>
       <Pagination :current="page" :allPages="allPages" @onChangePage="changePage" v-show="!loading"></Pagination>
     </div>
+    <Top></Top>
     <Foot></Foot>
   </div>
 </template>
@@ -27,6 +28,7 @@ import ArticleItem from '@/components/ArticleItem'
 import Pagination from '@/components/Pagination'
 import Foot from '@/components/Foot'
 import Loading from '@/components/Loading'
+import Top from '@/components/Top'
 import ScrollReveal from 'scrollreveal'
 export default {
   data () {
@@ -44,6 +46,7 @@ export default {
     ArticleItem,
     Pagination,
     Foot,
+    Top,
     Loading
   },
   methods: {

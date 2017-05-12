@@ -12,9 +12,13 @@
         </header>
         <div class="markdown-body" ref="content" v-html="html"></div>
       </div>
-      <Loading v-show="loading"></Loading>
+      <Loading v-show="loading && !error"></Loading>
+      <div class="error" v-show="error">
+        <router-link to="/">文章丢失在二次元空间</router-link>
+      </div>
       <Comment v-show="!loading"></Comment>
     </div>
+    <Top></Top>
     <Foot></Foot>
   </div>
 </template>
@@ -28,6 +32,7 @@ import Foot from '@/components/Foot'
 import Loading from '@/components/Loading'
 import ScrollReveal from 'scrollreveal'
 import Comment from '@/components/Comment'
+import Top from '@/components/Top'
 
 export default {
   data: function () {
@@ -35,6 +40,7 @@ export default {
       id: '',
       view: 0,
       loading: true,
+      error: false,
       detail: {
         name: '',
         time: '',
@@ -73,48 +79,57 @@ export default {
     NavBar,
     Foot,
     Loading,
-    Comment
+    Comment,
+    Top
   },
   methods: {
     getArticleDetail () {
       let that = this
       this.$axios.get('/article?id=' + this.id)
       .then(function (response) {
-        // console.log(response)
-        that.loading = false
-        that.detail = response.data.data
-        document.title = response.data.data.name
-        that.scrollReveal.reveal('.article-detail header', {
-          duration: 1000,
-          dealy: 500,
-          scale: 0,
-          origin: 'top',
-          distance: '20px',
-          viewFactor: 0
-        }, 500)
+        if (response.data.status === 1) {
+          that.loading = false
+          that.detail = response.data.data
+          document.title = response.data.data.name
+          that.scrollReveal.reveal('.article-detail header', {
+            duration: 1000,
+            dealy: 500,
+            scale: 0,
+            origin: 'top',
+            distance: '20px',
+            viewFactor: 0
+          }, 500)
+          that.addPageView()
+        } else {
+          that.loading = true
+          that.error = true
+        }
       })
       .catch(function (error) {
         that.loading = false
         console.log(error)
       })
+    },
+
+    addPageView () {
+      var that = this
+      this.$axios('/addPageView?name=' + this.id + '&add=true')
+      .then(function (response) {
+        if (response.data.status === 1) {
+          that.view = response.data.view
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
     }
   },
   created () {
-    var that = this
     window.scrollTo(0, 0)
     if (this.$route.query.id) {
       this.id = this.$route.query.id
     }
     this.getArticleDetail()
-    this.$axios('/addPageView?name=' + this.id + '&add=true')
-    .then(function (response) {
-      if (response.data.status === 1) {
-        that.view = response.data.view
-      }
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
   }
 }
 </script>
@@ -138,6 +153,12 @@ export default {
 .article-detail header span {
   line-height: 40px;
   color: gray;
+}
+
+.error a {
+  display: block;
+  text-align: center;
+  color: red;
 }
 
 
