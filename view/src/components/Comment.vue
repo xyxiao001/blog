@@ -382,6 +382,12 @@ export default {
     height: auto!important;
   }
 
+  .comment-item img {
+    display: inline-block!important;
+    max-width: 100%!important;
+    height: auto!important;
+  }
+
   .x-btn {
     display: inline-block;
     font-weight: 500;
