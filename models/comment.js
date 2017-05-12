@@ -6,7 +6,21 @@ let commentSchema = new Schema({
   articleId: {
     type: String,
   },
-  comments: {
+  username: {
+    type: String
+  },
+  comment: {
+    type: String
+  },
+  agree: {
+    type: Number,
+    default: 0
+  },
+  disagree: {
+    type: Number,
+    default: 0
+  },
+  replyList: {
     type: Array
   },
   time: {

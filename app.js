@@ -181,7 +181,7 @@ app.get('/article', (req, res) => {
             return item
           })
           return res.json({
-            status: 0,
+            status: 1,
             msg: '查询文章列表成功',
             limit: limit,
             current: current,
@@ -326,79 +326,64 @@ app.get('/addPageView', (req, res) => {
 
 // 新增评论
 app.post('/addComment', (req, res) => {
-  // 先去看看评论表里面是否有这个id
-  comment.findOne({articleId: req.body.id}).exec((error, data) => {
-    if (error) {
-      return res.json({
-        status: 0,
-        msg: '评论失败'
-      })
-    } else {
-      if (data) {
-        comment.update({articleId: req.body.id}, {$push: {comments: {
-          username: xss(req.body.username),
-          comment: xss(req.body.comment),
-          requestname: xss(req.body.requestname),
-          time: new Date()
-        }}}).exec((error, data) => {
-          if (error) {
-            return res.json({
-              status: 0,
-              msg: '评论失败'
-            })
-          }
-          return res.json({
-            status: 1,
-            msg: '评论成功'
-          })
-        })
-      } else {
-        var newComment = new comment({articleId: req.body.id, comments:[{
-          username: req.body.username,
-          comment: xss(req.body.comment),
-          requestname: null,
-          time: new Date()
-        }]})
-        newComment.save()
-        return res.json({
-          status: 1,
-          msg: '评论成功'
-        })
-      }
-    }
+  var newComment = new comment({
+    articleId: req.body.articleId,
+    username: req.body.username,
+    comment: xss(req.body.comment),
+    agree: 0,
+    disagree: 0,
+    replyList: [],
+    time: new Date()
+  })
+  newComment.save()
+  return res.json({
+    status: 1,
+    msg: '评论成功'
   })
 })
 
 // 获取评论
 app.get('/getComment', (req, res) => {
-  comment.findOne({articleId: req.query.id}).exec((error, data) => {
+
+  comment.find({articleId: req.query.id}).exec((error, data) => {
     if (error) {
       return res.json({
         status: 0,
         msg: '获取评论失败'
       })
     }
-    if (data) {
-        // 处理数据返回
-      var page = req.query.page
-      var limit = req.query.limit
-      var arr = data.comments.reverse()
-      var l = arr.length
-      var result = arr.slice((page - 1) * limit, page * limit)
-      return res.json({
-        status: 1,
-        data: result,
-        total: data.comments.length,
-        msg: '获取评论成功'
-      })
-    } else {
-      return res.json({
-        status: 1,
-        data: [],
-        total: 0,
-        msg: '获取评论成功'
-      })
+    // 每页条数
+    let limit = 10
+    if (req.query.limit) {
+      limit = ~~(req.query.limit)
+      limit = limit > 0 ? limit : 5
     }
+    let all = data.length
+    // 算出总页数
+    let allPages = Math.ceil(all / limit)
+    // 得到当前页数
+    let current = req.query.page ? ~~(req.query.page) : 1
+    if (current < 1) {
+      current = 1
+    }
+    current = current > allPages ? allPages : current
+    comment.find({articleId: req.query.id}).sort({time: -1}).skip((current - 1) * limit).limit(limit).exec((error, data) => {
+      if (error) {
+        return res.json({
+          status: 0,
+          msg: '获取评论失败'
+        })
+      }
+      // 处理数据巴拉拉
+      return res.json({
+        status: 1,
+        limit: limit,
+        current: current,
+        all: all,
+        allPages: allPages,
+        data: data
+      })
+    })
   })
 })
 

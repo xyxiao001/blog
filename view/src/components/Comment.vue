@@ -14,22 +14,27 @@
       <i class="iconfont icon-icon" @click.stop="emoji = !emoji"></i>
       <div class="x-emoji" v-show="emoji" @click.stop>
         <a class="emoji-item" v-for="i in 24" @click="chooseEmoji">
-          <img :src='"http://opq9z7jxu.bkt.clouddn.com/" + i + ".gif"' />
+          <img :data-src='"http://opq9z7jxu.bkt.clouddn.com/" + i + ".gif"' />
         </a>
         <a class="emoji-item" v-for="j in 5" @click="chooseEmoji">
-          <img :src='"http://opq9z7jxu.bkt.clouddn.com/" + (25 +j) + ".jpg"' />
+          <img :data-src='"http://opq9z7jxu.bkt.clouddn.com/" + (25 +j) + ".jpg"' />
         </a>
       </div>
       <button class="x-btn" @click="addComment" v-if="canAdd">发表</button>
       <button class="x-btn btn-disabled" v-else>发表</button>
     </div>
     <div class="comment-list" ref="commentList">
-      <p><span>评论列表：</span><span class="comment-total">当前第 {{ page }} 页, 总计: {{ totalComment }} 条</span></p>
+      <p><span>评论列表：</span><span class="comment-total">当前加载 {{ comments.length }} 条, 总计: {{ totalComment }} 条</span></p>
       <div class="comment-item" v-for="item in comments">
         <p class="c-title">{{ item.username }}</p>
         <div v-html="item.comment" class="c-content"></div>
-        <div class="c-time" :data-time="item.time">{{ item.timeDes }}</div>
+        <div class="c-time" :data-time="item.time">
+          <span>{{ item.timeDes }}</span>
+          </div>
       </div>
+    </div>
+    <div class="add-more" v-show="comments.length < totalComment" :class="{disabled: addMore}">
+      <button type="button" @click="getMore">{{ addMsg }}</button>
     </div>
   </div>
 </template>
@@ -49,7 +54,9 @@ export default {
       comment: '',
       totalComment: 0,
       page: 1,
-      limit: 15,
+      limit: 5,
+      addMore: false,
+      addMsg: '点击加载更多..',
       scrollReveal: ScrollReveal(),
       comments: []
     }
@@ -69,6 +76,18 @@ export default {
       } else {
         this.canAdd = false
       }
+    },
+    emoji () {
+      if (this.emoji) {
+        [].slice.call(document.querySelectorAll('.emoji-item img')).forEach((i) => {
+          if (!i.getAttribute('src')) {
+            i.setAttribute('src', i.getAttribute('data-src'))
+          }
+        })
+      }
+    },
+    addMore () {
+      this.addMsg = !this.addMore ? '点击加载更多..' : '加载中...'
     }
   },
   methods: {
@@ -86,7 +105,7 @@ export default {
     addComment () {
       let that = this
       var cdata = {
-        id: this.$route.query.id,
+        articleId: this.$route.query.id,
         username: that.username,
         comment: that.comment,
         time: new Date()
@@ -129,23 +148,28 @@ export default {
       this.canAdd = false
       this.$axios.get('getComment?id=' + this.$route.query.id + '&page=' + this.page + '&limit=' + this.limit)
       .then((response) => {
+        this.addMore = false
         if (response.data.status === 1) {
-          that.totalComment = response.data.total
-          that.comments = response.data.data.map((item) => {
+          that.totalComment = response.data.all
+          that.comments = this.comments.concat(response.data.data.map((item) => {
             return ({
+              _id: item._id,
+              articleId: item.articleId,
               username: item.username,
               comment: Xss(item.comment),
-              requestname: item.requestname,
+              replyList: item.replyList,
+              agree: item.agree,
+              disagree: item.disagree,
               time: Moment(item.time).format('YYYY-MM-DD HH:mm:ss'),
               timeDes: Moment(item.time).fromNow()
             })
-          })
+          }))
         }
         that.$nextTick(() => {
           that.scrollReveal.reveal('.comment-item', {
             container: that.$refs.commentList,
-            duration: 600,
-            dealy: 200,
+            duration: 500,
+            dealy: 100,
             scale: 0,
             origin: 'bottom',
             distance: '30px',
@@ -158,6 +182,13 @@ export default {
       .catch((error) => {
         console.log(error)
       })
+    },
+
+    // 加载更多
+    getMore () {
+      this.addMore = true
+      this.page += 1
+      this.getComments()
     }
   },
   mounted () {
@@ -318,6 +349,28 @@ export default {
 
   .c-time:hover::after, .c-time:hover::before {
     visibility: visible;
+  }
+
+  .add-more button {
+    display: block;
+    margin: 15px auto;
+    border: 1px solid #d3d3d3;
+    padding: 10px 0;
+    cursor: pointer;
+    font-weight: 500;
+    text-align: center;
+    background-color: #f8f8f8;
+    color: #333;
+    font-size: 12px;
+    outline: 0;
+    height: 100%;
+    width: 95%;
+    font-size: 16px;
+    background-image: linear-gradient(to top,#fcfcfc 0,#f8f8f8 100%);
+  }
+
+  .disabled button {
+    cursor: not-allowed;
   }
 </style>
 
