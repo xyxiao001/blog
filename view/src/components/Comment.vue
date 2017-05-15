@@ -30,7 +30,7 @@
         <div v-html="item.comment" class="c-content"></div>
         <div class="c-time" :data-time="item.time">
           <span>{{ item.timeDes }}</span>
-          </div>
+        </div>
       </div>
     </div>
     <div class="add-more" v-show="comments.length < totalComment" :class="{disabled: addMore}">

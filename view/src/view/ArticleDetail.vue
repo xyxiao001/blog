@@ -143,7 +143,7 @@ export default {
 }
 
 .article-detail header {
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 }
 
 .article-detail header h1 {
