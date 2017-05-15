@@ -330,6 +330,7 @@ app.post('/addComment', (req, res) => {
     articleId: req.body.articleId,
     username: req.body.username,
     comment: xss(req.body.comment),
+    avatar: xss(req.body.avatar) || '',
     agree: 0,
     disagree: 0,
     replyList: [],

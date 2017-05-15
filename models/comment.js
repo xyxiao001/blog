@@ -6,6 +6,9 @@ let commentSchema = new Schema({
   articleId: {
     type: String,
   },
+  avatar: {
+    type: String,
+  },
   username: {
     type: String
   },
