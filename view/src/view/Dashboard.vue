@@ -6,11 +6,11 @@
     <div class="page-content">
       <div class="user-info">
         <a href="https://github.com/xyxiao001" target="_blank" title="goodboy">
-          <img src="http://ofyaji162.bkt.clouddn.com/touxiang.jpg"><img>
+          <img src="http://cdn.xyxiao.cn/goodboy.jpg"><img>
         </a>
       </div>
       <div class="article-list" v-show="!loading" ref="articleList">
-        <div v-for="item in lists">
+        <div v-for="item in lists" :key="item.id">
           <ArticleItem :item="item" ></ArticleItem>
         </div>
       </div>

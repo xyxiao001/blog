@@ -90,7 +90,7 @@ export default {
         if (response.data.status === 1) {
           that.loading = false
           that.detail = response.data.data
-          document.title = response.data.data.name
+          document.title = `goodboy-${response.data.data.name}`
           that.scrollReveal.reveal('.article-detail header', {
             duration: 1000,
             dealy: 500,

@@ -1,6 +1,7 @@
 <template>
   <footer>
     <p>goodboy @2017 博客浏览量 {{ view }} 次</p>
+    <p>鄂ICP备17014604号-1</p>
   </footer>
 </template>
 

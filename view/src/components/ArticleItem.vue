@@ -4,7 +4,7 @@
       <h1 class="article-title" :title="item.name">{{item.name}}</h1>
     </router-link>
     <section class="article-content">
-      <p>{{ item.content}}</p>
+      <section v-html="html"></section>
     </section>
     <footer class="article-footer">
       <div class="article-des">
@@ -17,6 +17,8 @@
 
 <script>
 import Moment from 'moment'
+import Marked from 'marked'
+
 export default {
   props: ['item'],
   computed: {
@@ -26,6 +28,10 @@ export default {
     },
     realTime () {
       return Moment(this.item.time).format('YYYY-MM-DD HH:mm:ss')
+    },
+
+    html () {
+      return Marked(this.item.content)
     }
   }
 }
@@ -52,7 +58,7 @@ export default {
     margin: 10px 0;
     font-size: 16px;
     line-height: 2;
-    max-height: 90px;
+    max-height: 200px;
     overflow: hidden;
     color: #666;
   }

@@ -9,7 +9,7 @@ Vue.use(Router)
 // const Detail = r => require.ensure([], () => r(require('@/view/ArticleDetail')), 'group-detail')
 
 export default new Router({
-  mode: 'hash',
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -20,6 +20,10 @@ export default new Router({
       path: '/detail',
       name: 'Detail',
       component: Detail
+    },
+    {
+      path: '/*',
+      redirect: '/'
     }
   ]
 })

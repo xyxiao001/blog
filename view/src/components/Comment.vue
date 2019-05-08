@@ -13,11 +13,8 @@
     <div class="comment-control">
       <i class="iconfont icon-icon" @click.stop="emoji = !emoji"></i>
       <div class="x-emoji" v-show="emoji" @click.stop>
-        <a class="emoji-item" v-for="i in 24" @click="chooseEmoji">
-          <img :data-src='"http://opq9z7jxu.bkt.clouddn.com/" + i + ".gif"' />
-        </a>
-        <a class="emoji-item" v-for="j in 5" @click="chooseEmoji">
-          <img :data-src='"http://opq9z7jxu.bkt.clouddn.com/" + (25 +j) + ".jpg"' />
+        <a class="emoji-item" @click="chooseEmoji">
+          <img data-src="http://cdn.xyxiao.cn/6FC898F0005903969F7C0487928FA097.png" />
         </a>
       </div>
       <button class="x-btn" @click="addComment" v-if="canAdd">发表</button>

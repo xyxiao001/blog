@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <router-link to="/" class="icon">
-      <img src="http://ofyaji162.bkt.clouddn.com/icon.png" alt="">
+      <img src="http://cdn.xyxiao.cn/%E5%B0%8F%E6%81%B6%E9%AD%94.png" alt="">
     </router-link>
   </nav>
 </template>
