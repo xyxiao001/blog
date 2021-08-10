@@ -1,7 +1,7 @@
 <template>
   <footer>
     <p>goodboy @2017 博客浏览量 {{ view }} 次</p>
-    <p>鄂ICP备17014604号-1</p>
+    <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">鄂ICP备17014604号-1</a>
   </footer>
 </template>
 
